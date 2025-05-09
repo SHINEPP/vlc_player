@@ -116,7 +116,7 @@ class MediaInput {
     this.libVlcId,
     this.dataSourceType,
     this.dataSourceValue,
-    this.package,
+    this.packageName,
     this.hwAcc,
     this.options,
   });
@@ -127,7 +127,7 @@ class MediaInput {
 
   String? dataSourceValue;
 
-  String? package;
+  String? packageName;
 
   int? hwAcc;
 
@@ -138,7 +138,7 @@ class MediaInput {
       libVlcId,
       dataSourceType,
       dataSourceValue,
-      package,
+      packageName,
       hwAcc,
       options,
     ];
@@ -153,7 +153,7 @@ class MediaInput {
       libVlcId: result[0] as int?,
       dataSourceType: result[1] as int?,
       dataSourceValue: result[2] as String?,
-      package: result[3] as String?,
+      packageName: result[3] as String?,
       hwAcc: result[4] as int?,
       options: (result[5] as List<Object?>?)?.cast<String>(),
     );

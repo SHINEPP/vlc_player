@@ -19,7 +19,7 @@ class Media {
     return await VlcPlayerPlatform.instance.createMedia(
       libVlc,
       dataSource,
-      package: package,
+      packageName: package,
       hwAcc: hwAcc,
       options: options,
     );

@@ -138,7 +138,7 @@ data class MediaInput (
   val libVlcId: Long? = null,
   val dataSourceType: Long? = null,
   val dataSourceValue: String? = null,
-  val package: String? = null,
+  val packageName: String? = null,
   val hwAcc: Long? = null,
   val options: List<String>? = null
 )
@@ -148,10 +148,10 @@ data class MediaInput (
       val libVlcId = pigeonVar_list[0] as Long?
       val dataSourceType = pigeonVar_list[1] as Long?
       val dataSourceValue = pigeonVar_list[2] as String?
-      val package = pigeonVar_list[3] as String?
+      val packageName = pigeonVar_list[3] as String?
       val hwAcc = pigeonVar_list[4] as Long?
       val options = pigeonVar_list[5] as List<String>?
-      return MediaInput(libVlcId, dataSourceType, dataSourceValue, package, hwAcc, options)
+      return MediaInput(libVlcId, dataSourceType, dataSourceValue, packageName, hwAcc, options)
     }
   }
   fun toList(): List<Any?> {
@@ -159,7 +159,7 @@ data class MediaInput (
       libVlcId,
       dataSourceType,
       dataSourceValue,
-      package,
+      packageName,
       hwAcc,
       options,
     )

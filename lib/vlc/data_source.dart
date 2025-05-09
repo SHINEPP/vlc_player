@@ -7,6 +7,9 @@ enum DataSourceType {
 
   /// The video was loaded off of the local filesystem.
   file,
+
+  /// android content uri
+  contentUri,
 }
 
 class DataSource {

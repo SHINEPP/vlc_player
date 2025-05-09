@@ -41,7 +41,7 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
   Future<Media> createMedia(
     LibVlc libVlc,
     DataSource dataSource, {
-    String? package,
+    String? packageName,
     HwAcc? hwAcc,
     List<String>? options,
   }) async {

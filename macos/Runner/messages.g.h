@@ -31,13 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId
     dataSourceType:(nullable NSNumber *)dataSourceType
     dataSourceValue:(nullable NSString *)dataSourceValue
-    package:(nullable NSString *)package
+    packageName:(nullable NSString *)packageName
     hwAcc:(nullable NSNumber *)hwAcc
     options:(nullable NSArray<NSString *> *)options;
 @property(nonatomic, strong, nullable) NSNumber * libVlcId;
 @property(nonatomic, strong, nullable) NSNumber * dataSourceType;
 @property(nonatomic, copy, nullable) NSString * dataSourceValue;
-@property(nonatomic, copy, nullable) NSString * package;
+@property(nonatomic, copy, nullable) NSString * packageName;
 @property(nonatomic, strong, nullable) NSNumber * hwAcc;
 @property(nonatomic, copy, nullable) NSArray<NSString *> * options;
 @end

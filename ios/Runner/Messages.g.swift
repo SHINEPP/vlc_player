@@ -183,7 +183,7 @@ struct MediaInput: Hashable {
   var libVlcId: Int64? = nil
   var dataSourceType: Int64? = nil
   var dataSourceValue: String? = nil
-  var package: String? = nil
+  var packageName: String? = nil
   var hwAcc: Int64? = nil
   var options: [String]? = nil
 
@@ -193,7 +193,7 @@ struct MediaInput: Hashable {
     let libVlcId: Int64? = nilOrValue(pigeonVar_list[0])
     let dataSourceType: Int64? = nilOrValue(pigeonVar_list[1])
     let dataSourceValue: String? = nilOrValue(pigeonVar_list[2])
-    let package: String? = nilOrValue(pigeonVar_list[3])
+    let packageName: String? = nilOrValue(pigeonVar_list[3])
     let hwAcc: Int64? = nilOrValue(pigeonVar_list[4])
     let options: [String]? = nilOrValue(pigeonVar_list[5])
 
@@ -201,7 +201,7 @@ struct MediaInput: Hashable {
       libVlcId: libVlcId,
       dataSourceType: dataSourceType,
       dataSourceValue: dataSourceValue,
-      package: package,
+      packageName: packageName,
       hwAcc: hwAcc,
       options: options
     )
@@ -211,7 +211,7 @@ struct MediaInput: Hashable {
       libVlcId,
       dataSourceType,
       dataSourceValue,
-      package,
+      packageName,
       hwAcc,
       options,
     ]

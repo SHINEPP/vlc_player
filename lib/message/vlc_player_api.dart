@@ -29,7 +29,7 @@ class MediaInput {
   int? libVlcId;
   int? dataSourceType;
   String? dataSourceValue;
-  String? package;
+  String? packageName;
   int? hwAcc;
   List<String>? options;
 }

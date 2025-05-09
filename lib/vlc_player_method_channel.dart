@@ -27,7 +27,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   Future<Media> createMedia(
     LibVlc libVlc,
     DataSource dataSource, {
-    String? package,
+    String? packageName,
     HwAcc? hwAcc,
     List<String>? options,
   }) async {
@@ -36,7 +36,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
         libVlcId: libVlc.vlcId,
         dataSourceType: dataSource.type.index,
         dataSourceValue: dataSource.value,
-        package: package,
+        packageName: packageName,
         hwAcc: hwAcc?.index,
         options: options,
       ),

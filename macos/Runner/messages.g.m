@@ -109,14 +109,14 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 + (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId
     dataSourceType:(nullable NSNumber *)dataSourceType
     dataSourceValue:(nullable NSString *)dataSourceValue
-    package:(nullable NSString *)package
+    packageName:(nullable NSString *)packageName
     hwAcc:(nullable NSNumber *)hwAcc
     options:(nullable NSArray<NSString *> *)options {
   VLC_PLAYERMediaInput* pigeonResult = [[VLC_PLAYERMediaInput alloc] init];
   pigeonResult.libVlcId = libVlcId;
   pigeonResult.dataSourceType = dataSourceType;
   pigeonResult.dataSourceValue = dataSourceValue;
-  pigeonResult.package = package;
+  pigeonResult.packageName = packageName;
   pigeonResult.hwAcc = hwAcc;
   pigeonResult.options = options;
   return pigeonResult;
@@ -126,7 +126,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   pigeonResult.libVlcId = GetNullableObjectAtIndex(list, 0);
   pigeonResult.dataSourceType = GetNullableObjectAtIndex(list, 1);
   pigeonResult.dataSourceValue = GetNullableObjectAtIndex(list, 2);
-  pigeonResult.package = GetNullableObjectAtIndex(list, 3);
+  pigeonResult.packageName = GetNullableObjectAtIndex(list, 3);
   pigeonResult.hwAcc = GetNullableObjectAtIndex(list, 4);
   pigeonResult.options = GetNullableObjectAtIndex(list, 5);
   return pigeonResult;
@@ -139,7 +139,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
     self.libVlcId ?: [NSNull null],
     self.dataSourceType ?: [NSNull null],
     self.dataSourceValue ?: [NSNull null],
-    self.package ?: [NSNull null],
+    self.packageName ?: [NSNull null],
     self.hwAcc ?: [NSNull null],
     self.options ?: [NSNull null],
   ];
