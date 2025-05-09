@@ -1,5 +1,0 @@
-# pigeon_options.yaml
-input: message/vlc_player_api.dart
-dart_out: message/vlc_player_api.g.dart
-kotlin_out: android/src/main/kotlin/com/shinezzl/vlc_player/VlcPlayerApi.kt
-kotlin_package: com.shinezzl.vlc_player

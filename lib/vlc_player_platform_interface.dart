@@ -30,11 +30,11 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<LibVlc> createLibVlc({List<String>? options}) {
+  Future<LibVlc> createLibVlc({List<String>? options}) async {
     throw UnimplementedError('createLibVlc() has not been implemented.');
   }
 
-  Future<void> disposeLibVlc(LibVlc libVlc) {
+  Future<void> disposeLibVlc(LibVlc libVlc) async {
     throw UnimplementedError('disposeLibVlc() has not been implemented.');
   }
 
@@ -44,23 +44,23 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     String? package,
     HwAcc? hwAcc,
     List<String>? options,
-  }) {
+  }) async {
     throw UnimplementedError('createMedia() has not been implemented.');
   }
 
-  Future<void> disposeMedia(Media media) {
+  Future<void> disposeMedia(Media media) async {
     throw UnimplementedError('disposeMedia() has not been implemented.');
   }
 
-  Future<MediaPlayer> createMediaPlayer(LibVlc libVlc) {
+  Future<MediaPlayer> createMediaPlayer(LibVlc libVlc) async {
     throw UnimplementedError('createMediaPlayer() has not been implemented.');
   }
 
-  Future<void> disposeMediaPlayer(MediaPlayer mediaPlayer) {
+  Future<void> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
   }
 
-  Future<String?> getPlatformVersion() {
+  Future<String?> getPlatformVersion() async {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }
