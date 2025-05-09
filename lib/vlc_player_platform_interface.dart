@@ -1,4 +1,11 @@
+import 'dart:ffi';
+
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:vlc_player/vlc/data_source.dart';
+import 'package:vlc_player/vlc/hw_acc.dart';
+import 'package:vlc_player/vlc/lib_vlc.dart';
+import 'package:vlc_player/vlc/media.dart';
+import 'package:vlc_player/vlc/media_player.dart';
 
 import 'vlc_player_method_channel.dart';
 
@@ -21,6 +28,36 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
   static set instance(VlcPlayerPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
+  }
+
+  Future<LibVlc> createLibVlc({List<String>? options}) {
+    throw UnimplementedError('createLibVlc() has not been implemented.');
+  }
+
+  Future<void> disposeLibVlc(LibVlc libVlc) {
+    throw UnimplementedError('disposeLibVlc() has not been implemented.');
+  }
+
+  Future<Media> createMedia(
+    LibVlc libVlc,
+    DataSource dataSource, {
+    String? package,
+    HwAcc? hwAcc,
+    List<String>? options,
+  }) {
+    throw UnimplementedError('createMedia() has not been implemented.');
+  }
+
+  Future<void> disposeMedia(Media media) {
+    throw UnimplementedError('disposeMedia() has not been implemented.');
+  }
+
+  Future<MediaPlayer> createMediaPlayer(LibVlc libVlc) {
+    throw UnimplementedError('createMediaPlayer() has not been implemented.');
+  }
+
+  Future<void> disposeMediaPlayer(MediaPlayer mediaPlayer) {
+    throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
   }
 
   Future<String?> getPlatformVersion() {
