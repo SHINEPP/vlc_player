@@ -25,14 +25,17 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     private val objectHelper = ObjectHelper()
 
     fun startListening() {
+        Log.d(TAG, "startListening()")
         VlcApi.setUp(binding.binaryMessenger, this)
     }
 
     fun stopListening() {
+        Log.d(TAG, "stopListening()")
         VlcApi.setUp(binding.binaryMessenger, null)
     }
 
     override fun createLibVlc(input: LibVlcInput, callback: (Result<LibVlcOutput>) -> Unit) {
+        Log.d(TAG, "createLibVlc()")
         val options = input.options ?: emptyList()
         val libVlc = LibVLC(binding.applicationContext, options.toMutableList())
         val id = objectHelper.putObject(libVlc)
@@ -40,6 +43,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     override fun createMedia(input: MediaInput, callback: (Result<MediaOutput>) -> Unit) {
+        Log.d(TAG, "createMedia()")
         val libVlc = objectHelper.getObject<LibVLC>(input.libVlcId ?: -1)
         val options = input.options
         val type = input.dataSourceType
@@ -82,6 +86,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     override fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit) {
+        Log.d(TAG, "createMediaPlayer()")
         val libVlc = objectHelper.getObject<LibVLC>(input.libVlcId ?: -1)
         if (libVlc == null) {
             callback.invoke(Result.failure(IllegalArgumentException()))
