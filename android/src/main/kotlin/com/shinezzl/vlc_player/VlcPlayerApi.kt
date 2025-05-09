@@ -48,7 +48,8 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         val options = input.options
         val type = input.dataSourceType
         val source = input.dataSourceValue
-        if (libVlc == null || options == null || type == null || source == null) {
+        if (libVlc == null || type == null || source == null) {
+            Log.e(TAG, "createMedia(), params contain null")
             callback.invoke(Result.failure(IllegalArgumentException()))
             return
         }
@@ -74,14 +75,16 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
             else -> Media(libVlc, source.toUri())
         }
         if (media == null) {
+            Log.e(TAG, "createMedia(), media is null")
             callback.invoke(Result.failure(throwable ?: IllegalArgumentException()))
             return
         }
 
         media.setHWDecoderEnabled(true, false)
-        options.forEach { media.addOption(it) }
+        options?.forEach { media.addOption(it) }
         media.parseAsync(IMedia.Parse.ParseLocal or IMedia.Parse.ParseNetwork)
         val id = objectHelper.putObject(media)
+        Log.d(TAG, "createMedia(), id = $id")
         callback.invoke(Result.success(MediaOutput(id)))
     }
 
