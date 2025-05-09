@@ -49,12 +49,27 @@ class MediaPlayerOutput {
 
 @HostApi()
 abstract class VlcApi {
+  /// LibVLC
   @async
   LibVlcOutput createLibVlc(LibVlcInput input);
 
   @async
+  bool disposeLibVlc(int libVlcId);
+
+  /// Media
+  @async
   MediaOutput createMedia(MediaInput input);
 
   @async
+  bool mediaParseAsync(int mediaId);
+
+  @async
+  bool disposeMedia(int mediaId);
+
+  /// MediaPlayer
+  @async
   MediaPlayerOutput createMediaPlayer(MediaPlayerInput input);
+
+  @async
+  bool disposeMediaPlayer(int mediaPlayerId);
 }

@@ -17,12 +17,19 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   final _api = VlcApi();
 
+  /// LibVLC
   @override
   Future<LibVlc> createLibVlc({List<String>? options}) async {
     final output = await _api.createLibVlc(LibVlcInput(options: options));
     return LibVlc(vlcId: output.libVlcId ?? -1);
   }
 
+  @override
+  Future<bool> disposeLibVlc(LibVlc libVlc) async {
+    return await _api.disposeLibVlc(libVlc.vlcId);
+  }
+
+  /// Media
   @override
   Future<Media> createMedia(
     LibVlc libVlc,
@@ -45,11 +52,27 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
+  Future<bool> mediaParseAsync(Media media) async {
+    return await _api.mediaParseAsync(media.mediaId);
+  }
+
+  @override
+  Future<bool> disposeMedia(Media media) async {
+    return await _api.disposeMedia(media.mediaId);
+  }
+
+  /// MediaPlayer
+  @override
   Future<MediaPlayer> createMediaPlayer(LibVlc libVlc) async {
     final output = await _api.createMediaPlayer(
       MediaPlayerInput(libVlcId: libVlc.vlcId),
     );
     return MediaPlayer(mediaPlayerId: output.mediaPlayerId ?? -1);
+  }
+
+  @override
+  Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
+    return await _api.disposeMediaPlayer(mediaPlayer.mediaPlayerId);
   }
 
   @override

@@ -9,9 +9,9 @@ class Media {
 
   final int mediaId;
 
-  static Future<Media> create(
-    LibVlc libVlc,
-    DataSource dataSource, {
+  static Future<Media> create({
+    required LibVlc libVlc,
+    required DataSource dataSource,
     String? package,
     HwAcc? hwAcc,
     List<String>? options,
@@ -23,6 +23,10 @@ class Media {
       hwAcc: hwAcc,
       options: options,
     );
+  }
+
+  Future<bool> parseAsync() async {
+    return await VlcPlayerPlatform.instance.mediaParseAsync(this);
   }
 
   Future<void> dispose() async {

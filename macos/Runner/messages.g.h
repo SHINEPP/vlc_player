@@ -61,9 +61,16 @@ NS_ASSUME_NONNULL_BEGIN
 NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 
 @protocol VLC_PLAYERVlcApi
+/// LibVLC
 - (void)createLibVlcInput:(VLC_PLAYERLibVlcInput *)input completion:(void (^)(VLC_PLAYERLibVlcOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)disposeLibVlcLibVlcId:(NSInteger)libVlcId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+/// Media
 - (void)createMediaInput:(VLC_PLAYERMediaInput *)input completion:(void (^)(VLC_PLAYERMediaOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaParseAsyncMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)disposeMediaMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+/// MediaPlayer
 - (void)createMediaPlayerInput:(VLC_PLAYERMediaPlayerInput *)input completion:(void (^)(VLC_PLAYERMediaPlayerOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)disposeMediaPlayerMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void SetUpVLC_PLAYERVlcApi(id<FlutterBinaryMessenger> binaryMessenger, NSObject<VLC_PLAYERVlcApi> *_Nullable api);
