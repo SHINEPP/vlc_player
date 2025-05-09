@@ -39,6 +39,7 @@ class MediaOutput {
 }
 
 class MediaVideoTrack {
+  int? duration;
   int? height;
   int? width;
   int? sarNum;

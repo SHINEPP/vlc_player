@@ -155,6 +155,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         val tracks = media?.tracks ?: emptyArray()
         val videoTrack = tracks.firstOrNull { it is VideoTrack } as VideoTrack?
         val result = MediaVideoTrack(
+            duration = media?.duration,
             height = videoTrack?.height?.toLong(),
             width = videoTrack?.width?.toLong(),
             sarDen = videoTrack?.sarDen?.toLong(),

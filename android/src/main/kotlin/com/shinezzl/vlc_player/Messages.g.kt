@@ -209,6 +209,7 @@ data class MediaOutput (
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class MediaVideoTrack (
+  val duration: Long? = null,
   val height: Long? = null,
   val width: Long? = null,
   val sarNum: Long? = null,
@@ -221,19 +222,21 @@ data class MediaVideoTrack (
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): MediaVideoTrack {
-      val height = pigeonVar_list[0] as Long?
-      val width = pigeonVar_list[1] as Long?
-      val sarNum = pigeonVar_list[2] as Long?
-      val sarDen = pigeonVar_list[3] as Long?
-      val frameRateNum = pigeonVar_list[4] as Long?
-      val frameRateDen = pigeonVar_list[5] as Long?
-      val orientation = pigeonVar_list[6] as Long?
-      val projection = pigeonVar_list[7] as Long?
-      return MediaVideoTrack(height, width, sarNum, sarDen, frameRateNum, frameRateDen, orientation, projection)
+      val duration = pigeonVar_list[0] as Long?
+      val height = pigeonVar_list[1] as Long?
+      val width = pigeonVar_list[2] as Long?
+      val sarNum = pigeonVar_list[3] as Long?
+      val sarDen = pigeonVar_list[4] as Long?
+      val frameRateNum = pigeonVar_list[5] as Long?
+      val frameRateDen = pigeonVar_list[6] as Long?
+      val orientation = pigeonVar_list[7] as Long?
+      val projection = pigeonVar_list[8] as Long?
+      return MediaVideoTrack(duration, height, width, sarNum, sarDen, frameRateNum, frameRateDen, orientation, projection)
     }
   }
   fun toList(): List<Any?> {
     return listOf(
+      duration,
       height,
       width,
       sarNum,

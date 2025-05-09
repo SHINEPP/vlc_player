@@ -16,6 +16,7 @@ enum MediaEvent {
 
 class VideoTrack {
   VideoTrack({
+    required this.duration,
     required this.height,
     required this.width,
     required this.sarNum,
@@ -26,6 +27,7 @@ class VideoTrack {
     required this.projection,
   });
 
+  final int duration;
   final int height;
   final int width;
   final int sarNum;
@@ -78,6 +80,7 @@ class Media {
   Future<VideoTrack> getVideoTrack() async {
     final track = await VlcPlayerPlatform.instance.mediaGetVideoTrack(this);
     return VideoTrack(
+      duration: track.duration ?? 0,
       height: track.height ?? 0,
       width: track.width ?? 0,
       sarNum: track.sarNum ?? 0,

@@ -21,13 +21,15 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    _controller = VlcPlayerController();
+    _controller = VlcPlayerController.network(
+      "http://192.168.1.18:9000/video/落凡尘-2024_HD国语中字/落凡尘-2024_HD国语中字.mp4",
+    );
     initPlatformState();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    await _controller.init();
+    
   }
 
   @override

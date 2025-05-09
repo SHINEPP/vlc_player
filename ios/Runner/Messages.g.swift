@@ -254,6 +254,7 @@ struct MediaOutput: Hashable {
 
 /// Generated class from Pigeon that represents data sent in messages.
 struct MediaVideoTrack: Hashable {
+  var duration: Int64? = nil
   var height: Int64? = nil
   var width: Int64? = nil
   var sarNum: Int64? = nil
@@ -266,16 +267,18 @@ struct MediaVideoTrack: Hashable {
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
   static func fromList(_ pigeonVar_list: [Any?]) -> MediaVideoTrack? {
-    let height: Int64? = nilOrValue(pigeonVar_list[0])
-    let width: Int64? = nilOrValue(pigeonVar_list[1])
-    let sarNum: Int64? = nilOrValue(pigeonVar_list[2])
-    let sarDen: Int64? = nilOrValue(pigeonVar_list[3])
-    let frameRateNum: Int64? = nilOrValue(pigeonVar_list[4])
-    let frameRateDen: Int64? = nilOrValue(pigeonVar_list[5])
-    let orientation: Int64? = nilOrValue(pigeonVar_list[6])
-    let projection: Int64? = nilOrValue(pigeonVar_list[7])
+    let duration: Int64? = nilOrValue(pigeonVar_list[0])
+    let height: Int64? = nilOrValue(pigeonVar_list[1])
+    let width: Int64? = nilOrValue(pigeonVar_list[2])
+    let sarNum: Int64? = nilOrValue(pigeonVar_list[3])
+    let sarDen: Int64? = nilOrValue(pigeonVar_list[4])
+    let frameRateNum: Int64? = nilOrValue(pigeonVar_list[5])
+    let frameRateDen: Int64? = nilOrValue(pigeonVar_list[6])
+    let orientation: Int64? = nilOrValue(pigeonVar_list[7])
+    let projection: Int64? = nilOrValue(pigeonVar_list[8])
 
     return MediaVideoTrack(
+      duration: duration,
       height: height,
       width: width,
       sarNum: sarNum,
@@ -288,6 +291,7 @@ struct MediaVideoTrack: Hashable {
   }
   func toList() -> [Any?] {
     return [
+      duration,
       height,
       width,
       sarNum,

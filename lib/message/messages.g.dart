@@ -230,6 +230,7 @@ class MediaOutput {
 
 class MediaVideoTrack {
   MediaVideoTrack({
+    this.duration,
     this.height,
     this.width,
     this.sarNum,
@@ -239,6 +240,8 @@ class MediaVideoTrack {
     this.orientation,
     this.projection,
   });
+
+  int? duration;
 
   int? height;
 
@@ -258,6 +261,7 @@ class MediaVideoTrack {
 
   List<Object?> _toList() {
     return <Object?>[
+      duration,
       height,
       width,
       sarNum,
@@ -275,14 +279,15 @@ class MediaVideoTrack {
   static MediaVideoTrack decode(Object result) {
     result as List<Object?>;
     return MediaVideoTrack(
-      height: result[0] as int?,
-      width: result[1] as int?,
-      sarNum: result[2] as int?,
-      sarDen: result[3] as int?,
-      frameRateNum: result[4] as int?,
-      frameRateDen: result[5] as int?,
-      orientation: result[6] as int?,
-      projection: result[7] as int?,
+      duration: result[0] as int?,
+      height: result[1] as int?,
+      width: result[2] as int?,
+      sarNum: result[3] as int?,
+      sarDen: result[4] as int?,
+      frameRateNum: result[5] as int?,
+      frameRateDen: result[6] as int?,
+      orientation: result[7] as int?,
+      projection: result[8] as int?,
     );
   }
 

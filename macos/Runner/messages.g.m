@@ -178,7 +178,8 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 @end
 
 @implementation VLC_PLAYERMediaVideoTrack
-+ (instancetype)makeWithHeight:(nullable NSNumber *)height
++ (instancetype)makeWithDuration:(nullable NSNumber *)duration
+    height:(nullable NSNumber *)height
     width:(nullable NSNumber *)width
     sarNum:(nullable NSNumber *)sarNum
     sarDen:(nullable NSNumber *)sarDen
@@ -187,6 +188,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
     orientation:(nullable NSNumber *)orientation
     projection:(nullable NSNumber *)projection {
   VLC_PLAYERMediaVideoTrack* pigeonResult = [[VLC_PLAYERMediaVideoTrack alloc] init];
+  pigeonResult.duration = duration;
   pigeonResult.height = height;
   pigeonResult.width = width;
   pigeonResult.sarNum = sarNum;
@@ -199,14 +201,15 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 }
 + (VLC_PLAYERMediaVideoTrack *)fromList:(NSArray<id> *)list {
   VLC_PLAYERMediaVideoTrack *pigeonResult = [[VLC_PLAYERMediaVideoTrack alloc] init];
-  pigeonResult.height = GetNullableObjectAtIndex(list, 0);
-  pigeonResult.width = GetNullableObjectAtIndex(list, 1);
-  pigeonResult.sarNum = GetNullableObjectAtIndex(list, 2);
-  pigeonResult.sarDen = GetNullableObjectAtIndex(list, 3);
-  pigeonResult.frameRateNum = GetNullableObjectAtIndex(list, 4);
-  pigeonResult.frameRateDen = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.orientation = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.projection = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.duration = GetNullableObjectAtIndex(list, 0);
+  pigeonResult.height = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.width = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.sarNum = GetNullableObjectAtIndex(list, 3);
+  pigeonResult.sarDen = GetNullableObjectAtIndex(list, 4);
+  pigeonResult.frameRateNum = GetNullableObjectAtIndex(list, 5);
+  pigeonResult.frameRateDen = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.orientation = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.projection = GetNullableObjectAtIndex(list, 8);
   return pigeonResult;
 }
 + (nullable VLC_PLAYERMediaVideoTrack *)nullableFromList:(NSArray<id> *)list {
@@ -214,6 +217,7 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 }
 - (NSArray<id> *)toList {
   return @[
+    self.duration ?: [NSNull null],
     self.height ?: [NSNull null],
     self.width ?: [NSNull null],
     self.sarNum ?: [NSNull null],

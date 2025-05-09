@@ -49,7 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface VLC_PLAYERMediaVideoTrack : NSObject
-+ (instancetype)makeWithHeight:(nullable NSNumber *)height
++ (instancetype)makeWithDuration:(nullable NSNumber *)duration
+    height:(nullable NSNumber *)height
     width:(nullable NSNumber *)width
     sarNum:(nullable NSNumber *)sarNum
     sarDen:(nullable NSNumber *)sarDen
@@ -57,6 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
     frameRateDen:(nullable NSNumber *)frameRateDen
     orientation:(nullable NSNumber *)orientation
     projection:(nullable NSNumber *)projection;
+@property(nonatomic, strong, nullable) NSNumber * duration;
 @property(nonatomic, strong, nullable) NSNumber * height;
 @property(nonatomic, strong, nullable) NSNumber * width;
 @property(nonatomic, strong, nullable) NSNumber * sarNum;
