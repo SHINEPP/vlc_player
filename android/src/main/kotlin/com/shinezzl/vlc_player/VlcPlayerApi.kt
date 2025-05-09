@@ -48,13 +48,6 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         callback.invoke(Result.success(LibVlcOutput(id)))
     }
 
-    override fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit) {
-        Log.d(TAG, "mediaParseAsync()")
-        val media = objectHelper.getObject<Media>(mediaId)
-        val result = media?.parseAsync() ?: false
-        callback.invoke(Result.success(result))
-    }
-
     override fun disposeLibVlc(libVlcId: Long, callback: (Result<Boolean>) -> Unit) {
         Log.d(TAG, "disposeLibVlc()")
         objectHelper.removeObject<LibVLC>(libVlcId)?.release()
@@ -100,30 +93,8 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
             return
         }
 
-        media.setEventListener { event ->
-            Log.d(TAG, "createMedia(), eventListener, event = ${event.type}")
-            when (event.type) {
-                IMedia.Event.MetaChanged -> {
-                    flutterApi.onMediaEvent(MediaEvent.PARSED_CHANGED.index) {}
-                }
-
-                IMedia.Event.SubItemAdded -> {
-                    flutterApi.onMediaEvent(MediaEvent.SUB_ITEM_ADDED.index) {}
-                }
-
-                IMedia.Event.DurationChanged -> {
-                    flutterApi.onMediaEvent(MediaEvent.DURATION_CHANGED.index) {}
-                }
-
-                IMedia.Event.ParsedChanged -> {
-                    flutterApi.onMediaEvent(MediaEvent.PARSED_CHANGED.index) {}
-                }
-
-                IMedia.Event.SubItemTreeAdded -> {
-                    flutterApi.onMediaEvent(MediaEvent.SUB_ITEM_TREE_ADDED.index) {}
-                }
-            }
-        }
+        val mediaId = objectHelper.putObject(media)
+        Log.d(TAG, "createMedia(), mediaId = $mediaId")
 
         when (input.hwAcc) {
             HwAcc.DISABLED.index -> media.setHWDecoderEnabled(false, false)
@@ -138,10 +109,43 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         }
 
         options?.forEach { media.addOption(it) }
-        media.parseAsync(IMedia.Parse.ParseLocal or IMedia.Parse.ParseNetwork)
-        val id = objectHelper.putObject(media)
-        Log.d(TAG, "createMedia(), id = $id")
-        callback.invoke(Result.success(MediaOutput(id)))
+        callback.invoke(Result.success(MediaOutput(mediaId)))
+    }
+
+    override fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit) {
+        val media = objectHelper.getObject<Media>(mediaId)
+        media?.setEventListener { event ->
+            Log.d(TAG, "setMediaEventListener(), eventListener, event = ${event.type}")
+            when (event.type) {
+                IMedia.Event.MetaChanged -> {
+                    flutterApi.onMediaEvent(mediaId, MediaEvent.PARSED_CHANGED.index) {}
+                }
+
+                IMedia.Event.SubItemAdded -> {
+                    flutterApi.onMediaEvent(mediaId, MediaEvent.SUB_ITEM_ADDED.index) {}
+                }
+
+                IMedia.Event.DurationChanged -> {
+                    flutterApi.onMediaEvent(mediaId, MediaEvent.DURATION_CHANGED.index) {}
+                }
+
+                IMedia.Event.ParsedChanged -> {
+                    flutterApi.onMediaEvent(mediaId, MediaEvent.PARSED_CHANGED.index) {}
+                }
+
+                IMedia.Event.SubItemTreeAdded -> {
+                    flutterApi.onMediaEvent(mediaId, MediaEvent.SUB_ITEM_TREE_ADDED.index) {}
+                }
+            }
+        }
+        callback.invoke(Result.success(true))
+    }
+
+    override fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "mediaParseAsync()")
+        val media = objectHelper.getObject<Media>(mediaId)
+        val result = media?.parseAsync(IMedia.Parse.ParseLocal or IMedia.Parse.ParseNetwork) ?: false
+        callback.invoke(Result.success(result))
     }
 
     override fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit) {

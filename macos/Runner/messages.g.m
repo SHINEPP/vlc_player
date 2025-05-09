@@ -352,6 +352,25 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.setMediaEventListener", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(setMediaEventListenerMediaId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(setMediaEventListenerMediaId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        [api setMediaEventListenerMediaId:arg_mediaId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaParseAsync", messageChannelSuffix]
         binaryMessenger:binaryMessenger
         codec:VLC_PLAYERGetMessagesCodec()];
@@ -445,22 +464,23 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
   }
   return self;
 }
-- (void)onMediaEventEvent:(NSInteger)arg_event completion:(void (^)(FlutterError *_Nullable))completion {
+- (void)onMediaEventMediaId:(NSInteger)arg_mediaId event:(NSInteger)arg_event completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion {
   NSString *channelName = [NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent", _messageChannelSuffix];
   FlutterBasicMessageChannel *channel =
     [FlutterBasicMessageChannel
       messageChannelWithName:channelName
       binaryMessenger:self.binaryMessenger
       codec:VLC_PLAYERGetMessagesCodec()];
-  [channel sendMessage:@[@(arg_event)] reply:^(NSArray<id> *reply) {
+  [channel sendMessage:@[@(arg_mediaId), @(arg_event)] reply:^(NSArray<id> *reply) {
     if (reply != nil) {
       if (reply.count > 1) {
-        completion([FlutterError errorWithCode:reply[0] message:reply[1] details:reply[2]]);
+        completion(nil, [FlutterError errorWithCode:reply[0] message:reply[1] details:reply[2]]);
       } else {
-        completion(nil);
+        NSNumber *output = reply[0] == [NSNull null] ? nil : reply[0];
+        completion(output, nil);
       }
     } else {
-      completion(createConnectionError(channelName));
+      completion(nil, createConnectionError(channelName));
     } 
   }];
 }

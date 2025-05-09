@@ -337,6 +337,7 @@ interface VlcApi {
   fun disposeLibVlc(libVlcId: Long, callback: (Result<Boolean>) -> Unit)
   /** Media */
   fun createMedia(input: MediaInput, callback: (Result<MediaOutput>) -> Unit)
+  fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   /** MediaPlayer */
@@ -399,6 +400,26 @@ interface VlcApi {
             val args = message as List<Any?>
             val inputArg = args[0] as MediaInput
             api.createMedia(inputArg) { result: Result<MediaOutput> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.setMediaEventListener$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaIdArg = args[0] as Long
+            api.setMediaEventListener(mediaIdArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -503,17 +524,20 @@ class VlcFlutterApi(private val binaryMessenger: BinaryMessenger, private val me
       MessagesPigeonCodec()
     }
   }
-  fun onMediaEvent(eventArg: Long, callback: (Result<Unit>) -> Unit)
+  fun onMediaEvent(mediaIdArg: Long, eventArg: Long, callback: (Result<Boolean>) -> Unit)
 {
     val separatedMessageChannelSuffix = if (messageChannelSuffix.isNotEmpty()) ".$messageChannelSuffix" else ""
     val channelName = "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent$separatedMessageChannelSuffix"
     val channel = BasicMessageChannel<Any?>(binaryMessenger, channelName, codec)
-    channel.send(listOf(eventArg)) {
+    channel.send(listOf(mediaIdArg, eventArg)) {
       if (it is List<*>) {
         if (it.size > 1) {
           callback(Result.failure(FlutterError(it[0] as String, it[1] as String, it[2] as String?)))
+        } else if (it[0] == null) {
+          callback(Result.failure(FlutterError("null-error", "Flutter api returned null value for non-null return value.", "")))
         } else {
-          callback(Result.success(Unit))
+          val output = it[0] as Boolean
+          callback(Result.success(output))
         }
       } else {
         callback(Result.failure(MessagesPigeonUtils.createConnectionError(channelName)))

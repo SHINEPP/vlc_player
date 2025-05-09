@@ -12,6 +12,9 @@ class VlcPlayerController {
       libVlc: libVlc,
       dataSource: DataSource(type: DataSourceType.network, value: url),
     );
+    media.setEventListener();
+    await media.parseAsync();
+
 
     final mediaPlayer = await MediaPlayer.create(libVlc);
 

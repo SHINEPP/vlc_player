@@ -51,6 +51,11 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
+  Future<void> setMediaEventListener(Media media) async {
+    await _api.setMediaEventListener(media.mediaId);
+  }
+
+  @override
   Future<bool> mediaParseAsync(Media media) async {
     return await _api.mediaParseAsync(media.mediaId);
   }

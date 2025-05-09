@@ -61,6 +61,9 @@ abstract class VlcApi {
   MediaOutput createMedia(MediaInput input);
 
   @async
+  bool setMediaEventListener(int mediaId);
+
+  @async
   bool mediaParseAsync(int mediaId);
 
   @async
@@ -76,5 +79,5 @@ abstract class VlcApi {
 
 @FlutterApi()
 abstract class VlcFlutterApi {
-  void onMediaEvent(int event);
+  bool onMediaEvent(int mediaId, int event);
 }

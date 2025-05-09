@@ -33,6 +33,10 @@ class Media {
     );
   }
 
+  void setEventListener() {
+    VlcPlayerPlatform.instance.setMediaEventListener(this);
+  }
+
   Future<bool> parseAsync() async {
     return await VlcPlayerPlatform.instance.mediaParseAsync(this);
   }

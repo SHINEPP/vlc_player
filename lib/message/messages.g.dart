@@ -461,6 +461,34 @@ class VlcApi {
     }
   }
 
+  Future<bool> setMediaEventListener(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.setMediaEventListener$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
   Future<bool> mediaParseAsync(int mediaId) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaParseAsync$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
@@ -578,7 +606,7 @@ class VlcApi {
 abstract class VlcFlutterApi {
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
 
-  void onMediaEvent(int event);
+  bool onMediaEvent(int mediaId, int event);
 
   static void setUp(VlcFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
     messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
@@ -593,12 +621,15 @@ abstract class VlcFlutterApi {
           assert(message != null,
           'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null.');
           final List<Object?> args = (message as List<Object?>?)!;
-          final int? arg_event = (args[0] as int?);
+          final int? arg_mediaId = (args[0] as int?);
+          assert(arg_mediaId != null,
+              'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null, expected non-null int.');
+          final int? arg_event = (args[1] as int?);
           assert(arg_event != null,
               'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null, expected non-null int.');
           try {
-            api.onMediaEvent(arg_event!);
-            return wrapResponse(empty: true);
+            final bool output = api.onMediaEvent(arg_mediaId!, arg_event!);
+            return wrapResponse(result: output);
           } on PlatformException catch (e) {
             return wrapResponse(error: e);
           }          catch (e) {

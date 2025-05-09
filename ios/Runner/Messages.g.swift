@@ -371,6 +371,7 @@ protocol VlcApi {
   func disposeLibVlc(libVlcId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Media
   func createMedia(input: MediaInput, completion: @escaping (Result<MediaOutput, Error>) -> Void)
+  func setMediaEventListener(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaParseAsync(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// MediaPlayer
@@ -436,6 +437,23 @@ class VlcApiSetup {
       }
     } else {
       createMediaChannel.setMessageHandler(nil)
+    }
+    let setMediaEventListenerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.setMediaEventListener\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setMediaEventListenerChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaIdArg = args[0] as! Int64
+        api.setMediaEventListener(mediaId: mediaIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      setMediaEventListenerChannel.setMessageHandler(nil)
     }
     let mediaParseAsyncChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaParseAsync\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
@@ -510,7 +528,7 @@ class VlcApiSetup {
 }
 /// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
 protocol VlcFlutterApiProtocol {
-  func onMediaEvent(event eventArg: Int64, completion: @escaping (Result<Void, PigeonError>) -> Void)
+  func onMediaEvent(mediaId mediaIdArg: Int64, event eventArg: Int64, completion: @escaping (Result<Bool, PigeonError>) -> Void)
 }
 class VlcFlutterApi: VlcFlutterApiProtocol {
   private let binaryMessenger: FlutterBinaryMessenger
@@ -522,10 +540,10 @@ class VlcFlutterApi: VlcFlutterApiProtocol {
   var codec: MessagesPigeonCodec {
     return MessagesPigeonCodec.shared
   }
-  func onMediaEvent(event eventArg: Int64, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+  func onMediaEvent(mediaId mediaIdArg: Int64, event eventArg: Int64, completion: @escaping (Result<Bool, PigeonError>) -> Void) {
     let channelName: String = "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent\(messageChannelSuffix)"
     let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
-    channel.sendMessage([eventArg] as [Any?]) { response in
+    channel.sendMessage([mediaIdArg, eventArg] as [Any?]) { response in
       guard let listResponse = response as? [Any?] else {
         completion(.failure(createConnectionError(withChannelName: channelName)))
         return
@@ -535,8 +553,11 @@ class VlcFlutterApi: VlcFlutterApiProtocol {
         let message: String? = nilOrValue(listResponse[1])
         let details: String? = nilOrValue(listResponse[2])
         completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else if listResponse[0] == nil {
+        completion(.failure(PigeonError(code: "null-error", message: "Flutter api returned null value for non-null return value.", details: "")))
       } else {
-        completion(.success(()))
+        let result = listResponse[0] as! Bool
+        completion(.success(result))
       }
     }
   }

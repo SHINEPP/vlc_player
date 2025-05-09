@@ -48,6 +48,12 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     throw UnimplementedError('createMedia() has not been implemented.');
   }
 
+  Future<void> setMediaEventListener(Media media) async {
+    throw UnimplementedError(
+      'setMediaEventListener() has not been implemented.',
+    );
+  }
+
   Future<bool> mediaParseAsync(Media media) async {
     throw UnimplementedError('mediaParseAsync() has not been implemented.');
   }
