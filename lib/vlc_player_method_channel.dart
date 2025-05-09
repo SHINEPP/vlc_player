@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'vlc/lib_vlc.dart';
 import 'vlc_player_platform_interface.dart';
 
 /// An implementation of [VlcPlayerPlatform] that uses method channels.
@@ -10,8 +11,13 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   final methodChannel = const MethodChannel('vlc_player');
 
   @override
+  Future<LibVlc> createLibVlc({List<String>? options}) {
+    // TODO: implement createLibVlc
+    return super.createLibVlc(options: options);
+  }
+
+  @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
-    return version;
+    return await methodChannel.invokeMethod<String>('getPlatformVersion');
   }
 }
