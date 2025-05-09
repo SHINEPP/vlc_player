@@ -77,4 +77,11 @@ extern void SetUpVLC_PLAYERVlcApi(id<FlutterBinaryMessenger> binaryMessenger, NS
 
 extern void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger, NSObject<VLC_PLAYERVlcApi> *_Nullable api, NSString *messageChannelSuffix);
 
+
+@interface VLC_PLAYERVlcFlutterApi : NSObject
+- (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger;
+- (instancetype)initWithBinaryMessenger:(id<FlutterBinaryMessenger>)binaryMessenger messageChannelSuffix:(nullable NSString *)messageChannelSuffix;
+- (void)onMediaEventEvent:(NSInteger)event completion:(void (^)(FlutterError *_Nullable))completion;
+@end
+
 NS_ASSUME_NONNULL_END

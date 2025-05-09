@@ -4,6 +4,14 @@ import 'package:vlc_player/vlc_player_platform_interface.dart';
 import 'data_source.dart';
 import 'hw_acc.dart';
 
+enum MediaEvent {
+  metaChanged,
+  subItemAdded,
+  durationChanged,
+  parsedChanged,
+  subItemTreeAdded,
+}
+
 class Media {
   Media({required this.mediaId});
 

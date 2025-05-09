@@ -15,9 +15,9 @@ class VlcPlayerController {
 
     final mediaPlayer = await MediaPlayer.create(libVlc);
 
-    await mediaPlayer.dispose();
-    await media.dispose();
-    await libVlc.dispose();
+    //await mediaPlayer.dispose();
+    //await media.dispose();
+    //await libVlc.dispose();
   }
 
   Future<void> dispose() async {

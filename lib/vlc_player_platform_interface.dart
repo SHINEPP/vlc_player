@@ -1,12 +1,10 @@
-import 'dart:ffi';
-
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:vlc_player/vlc/data_source.dart';
-import 'package:vlc_player/vlc/hw_acc.dart';
-import 'package:vlc_player/vlc/lib_vlc.dart';
-import 'package:vlc_player/vlc/media.dart';
-import 'package:vlc_player/vlc/media_player.dart';
 
+import 'vlc/data_source.dart';
+import 'vlc/hw_acc.dart';
+import 'vlc/lib_vlc.dart';
+import 'vlc/media.dart';
+import 'vlc/media_player.dart';
 import 'vlc_player_method_channel.dart';
 
 abstract class VlcPlayerPlatform extends PlatformInterface {
@@ -65,9 +63,5 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
 
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
-  }
-
-  Future<String?> getPlatformVersion() async {
-    throw UnimplementedError('platformVersion() has not been implemented.');
   }
 }

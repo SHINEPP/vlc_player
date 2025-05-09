@@ -7,10 +7,12 @@ import MediaOutput
 import MediaPlayerInput
 import MediaPlayerOutput
 import VlcApi
+import VlcFlutterApi
 import android.util.Log
 import androidx.core.net.toUri
 import com.shinezzl.vlc_player.vlc.DataSourceType
 import com.shinezzl.vlc_player.vlc.HwAcc
+import com.shinezzl.vlc_player.vlc.MediaEvent
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
@@ -24,6 +26,8 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     private val objectHelper = ObjectHelper()
+
+    private val flutterApi = VlcFlutterApi(binding.binaryMessenger)
 
     fun startListening() {
         Log.d(TAG, "startListening()")
@@ -94,6 +98,31 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
             Log.e(TAG, "createMedia(), media is null")
             callback.invoke(Result.failure(throwable ?: IllegalArgumentException()))
             return
+        }
+
+        media.setEventListener { event ->
+            Log.d(TAG, "createMedia(), eventListener, event = ${event.type}")
+            when (event.type) {
+                IMedia.Event.MetaChanged -> {
+                    flutterApi.onMediaEvent(MediaEvent.PARSED_CHANGED.index) {}
+                }
+
+                IMedia.Event.SubItemAdded -> {
+                    flutterApi.onMediaEvent(MediaEvent.SUB_ITEM_ADDED.index) {}
+                }
+
+                IMedia.Event.DurationChanged -> {
+                    flutterApi.onMediaEvent(MediaEvent.DURATION_CHANGED.index) {}
+                }
+
+                IMedia.Event.ParsedChanged -> {
+                    flutterApi.onMediaEvent(MediaEvent.PARSED_CHANGED.index) {}
+                }
+
+                IMedia.Event.SubItemTreeAdded -> {
+                    flutterApi.onMediaEvent(MediaEvent.SUB_ITEM_TREE_ADDED.index) {}
+                }
+            }
         }
 
         when (input.hwAcc) {

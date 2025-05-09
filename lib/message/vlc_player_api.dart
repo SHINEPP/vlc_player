@@ -73,3 +73,8 @@ abstract class VlcApi {
   @async
   bool disposeMediaPlayer(int mediaPlayerId);
 }
+
+@FlutterApi()
+abstract class VlcFlutterApi {
+  void onMediaEvent(int event);
+}
