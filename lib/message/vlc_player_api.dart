@@ -38,6 +38,17 @@ class MediaOutput {
   int? mediaId;
 }
 
+class MediaVideoTrack {
+  int? height;
+  int? width;
+  int? sarNum;
+  int? sarDen;
+  int? frameRateNum;
+  int? frameRateDen;
+  int? orientation;
+  int? projection;
+}
+
 // Media Player
 class MediaPlayerInput {
   int? libVlcId;
@@ -65,6 +76,9 @@ abstract class VlcApi {
 
   @async
   bool mediaParseAsync(int mediaId);
+
+  @async
+  MediaVideoTrack mediaGetVideoTrack(int mediaId);
 
   @async
   bool disposeMedia(int mediaId);

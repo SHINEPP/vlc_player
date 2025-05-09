@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:vlc_player/vlc/lib_vlc.dart';
 import 'package:vlc_player/vlc_player_platform_interface.dart';
 
@@ -12,10 +14,34 @@ enum MediaEvent {
   subItemTreeAdded,
 }
 
-class Media {
-  Media({required this.mediaId});
+class VideoTrack {
+  VideoTrack({
+    required this.height,
+    required this.width,
+    required this.sarNum,
+    required this.sarDen,
+    required this.frameRateNum,
+    required this.frameRateDen,
+    required this.orientation,
+    required this.projection,
+  });
 
-  final int mediaId;
+  final int height;
+  final int width;
+  final int sarNum;
+  final int sarDen;
+  final int frameRateNum;
+  final int frameRateDen;
+  final int orientation;
+  final int projection;
+}
+
+class Media {
+  static final _medias = <int, Media>{};
+
+  static void onMediaEvent(int mediaId, int eventIndex) {
+    _medias[mediaId]?._onMediaEvent(eventIndex);
+  }
 
   static Future<Media> create({
     required LibVlc libVlc,
@@ -33,15 +59,55 @@ class Media {
     );
   }
 
+  Media({required this.mediaId}) {
+    _medias[mediaId] = this;
+  }
+
+  final int mediaId;
+  final _parsedCompleter = Completer<bool>();
+
   void setEventListener() {
     VlcPlayerPlatform.instance.setMediaEventListener(this);
   }
 
   Future<bool> parseAsync() async {
-    return await VlcPlayerPlatform.instance.mediaParseAsync(this);
+    await VlcPlayerPlatform.instance.mediaParseAsync(this);
+    return _parsedCompleter.future;
+  }
+
+  Future<VideoTrack> getVideoTrack() async {
+    final track = await VlcPlayerPlatform.instance.mediaGetVideoTrack(this);
+    return VideoTrack(
+      height: track.height ?? 0,
+      width: track.width ?? 0,
+      sarNum: track.sarNum ?? 0,
+      sarDen: track.sarDen ?? 0,
+      frameRateNum: track.frameRateNum ?? 0,
+      frameRateDen: track.frameRateDen ?? 0,
+      orientation: track.orientation ?? 0,
+      projection: track.projection ?? 0,
+    );
+  }
+
+  void _onMediaEvent(int eventIndex) {
+    final event = MediaEvent.values[eventIndex];
+    switch (event) {
+      case MediaEvent.metaChanged:
+        break;
+      case MediaEvent.subItemAdded:
+        break;
+      case MediaEvent.durationChanged:
+        break;
+      case MediaEvent.parsedChanged:
+        _parsedCompleter.complete(true);
+        break;
+      case MediaEvent.subItemTreeAdded:
+        break;
+    }
   }
 
   Future<void> dispose() async {
+    _medias.remove(mediaId);
     await VlcPlayerPlatform.instance.disposeMedia(this);
   }
 }

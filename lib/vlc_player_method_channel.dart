@@ -61,6 +61,11 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
+  Future<MediaVideoTrack> mediaGetVideoTrack(Media media) async {
+    return await _api.mediaGetVideoTrack(media.mediaId);
+  }
+
+  @override
   Future<bool> disposeMedia(Media media) async {
     return await _api.disposeMedia(media.mediaId);
   }

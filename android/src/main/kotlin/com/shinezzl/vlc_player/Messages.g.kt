@@ -208,6 +208,55 @@ data class MediaOutput (
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class MediaVideoTrack (
+  val height: Long? = null,
+  val width: Long? = null,
+  val sarNum: Long? = null,
+  val sarDen: Long? = null,
+  val frameRateNum: Long? = null,
+  val frameRateDen: Long? = null,
+  val orientation: Long? = null,
+  val projection: Long? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MediaVideoTrack {
+      val height = pigeonVar_list[0] as Long?
+      val width = pigeonVar_list[1] as Long?
+      val sarNum = pigeonVar_list[2] as Long?
+      val sarDen = pigeonVar_list[3] as Long?
+      val frameRateNum = pigeonVar_list[4] as Long?
+      val frameRateDen = pigeonVar_list[5] as Long?
+      val orientation = pigeonVar_list[6] as Long?
+      val projection = pigeonVar_list[7] as Long?
+      return MediaVideoTrack(height, width, sarNum, sarDen, frameRateNum, frameRateDen, orientation, projection)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      height,
+      width,
+      sarNum,
+      sarDen,
+      frameRateNum,
+      frameRateDen,
+      orientation,
+      projection,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MediaVideoTrack) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class MediaPlayerInput (
   val libVlcId: Long? = null
 )
@@ -287,10 +336,15 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       }
       133.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MediaPlayerInput.fromList(it)
+          MediaVideoTrack.fromList(it)
         }
       }
       134.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MediaPlayerInput.fromList(it)
+        }
+      }
+      135.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           MediaPlayerOutput.fromList(it)
         }
@@ -316,12 +370,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(132)
         writeValue(stream, value.toList())
       }
-      is MediaPlayerInput -> {
+      is MediaVideoTrack -> {
         stream.write(133)
         writeValue(stream, value.toList())
       }
-      is MediaPlayerOutput -> {
+      is MediaPlayerInput -> {
         stream.write(134)
+        writeValue(stream, value.toList())
+      }
+      is MediaPlayerOutput -> {
+        stream.write(135)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -339,6 +397,7 @@ interface VlcApi {
   fun createMedia(input: MediaInput, callback: (Result<MediaOutput>) -> Unit)
   fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit)
+  fun mediaGetVideoTrack(mediaId: Long, callback: (Result<MediaVideoTrack>) -> Unit)
   fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   /** MediaPlayer */
   fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit)
@@ -440,6 +499,26 @@ interface VlcApi {
             val args = message as List<Any?>
             val mediaIdArg = args[0] as Long
             api.mediaParseAsync(mediaIdArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetVideoTrack$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaIdArg = args[0] as Long
+            api.mediaGetVideoTrack(mediaIdArg) { result: Result<MediaVideoTrack> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

@@ -6,6 +6,7 @@ import MediaInput
 import MediaOutput
 import MediaPlayerInput
 import MediaPlayerOutput
+import MediaVideoTrack
 import VlcApi
 import VlcFlutterApi
 import android.util.Log
@@ -18,6 +19,7 @@ import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import org.videolan.libvlc.interfaces.IMedia
+import org.videolan.libvlc.interfaces.IMedia.VideoTrack
 
 class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : VlcApi {
 
@@ -145,6 +147,23 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         Log.d(TAG, "mediaParseAsync()")
         val media = objectHelper.getObject<Media>(mediaId)
         val result = media?.parseAsync(IMedia.Parse.ParseLocal or IMedia.Parse.ParseNetwork) ?: false
+        callback.invoke(Result.success(result))
+    }
+
+    override fun mediaGetVideoTrack(mediaId: Long, callback: (Result<MediaVideoTrack>) -> Unit) {
+        val media = objectHelper.getObject<Media>(mediaId)
+        val tracks = media?.tracks ?: emptyArray()
+        val videoTrack = tracks.firstOrNull { it is VideoTrack } as VideoTrack?
+        val result = MediaVideoTrack(
+            height = videoTrack?.height?.toLong(),
+            width = videoTrack?.width?.toLong(),
+            sarDen = videoTrack?.sarDen?.toLong(),
+            sarNum = videoTrack?.sarNum?.toLong(),
+            frameRateDen = videoTrack?.frameRateDen?.toLong(),
+            frameRateNum = videoTrack?.frameRateNum?.toLong(),
+            orientation = videoTrack?.orientation?.toLong(),
+            projection = videoTrack?.projection?.toLong(),
+        )
         callback.invoke(Result.success(result))
     }
 

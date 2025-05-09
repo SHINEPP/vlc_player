@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'message/messages.g.dart';
 import 'vlc/data_source.dart';
 import 'vlc/hw_acc.dart';
 import 'vlc/lib_vlc.dart';
@@ -56,6 +57,10 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
 
   Future<bool> mediaParseAsync(Media media) async {
     throw UnimplementedError('mediaParseAsync() has not been implemented.');
+  }
+
+  Future<MediaVideoTrack> mediaGetVideoTrack(Media media) async {
+    throw UnimplementedError('mediaGetVideoTrack() has not been implemented.');
   }
 
   Future<bool> disposeMedia(Media media) async {
