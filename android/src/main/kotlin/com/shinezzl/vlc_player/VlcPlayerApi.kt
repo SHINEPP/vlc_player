@@ -1,13 +1,8 @@
 package com.shinezzl.vlc_player
 
-import LibVlcInput
-import LibVlcOutput
-import MediaInput
-import MediaOutput
-import MediaPlayerInput
-import MediaPlayerOutput
+import MediaCreateInput
 import MediaVideoTrack
-import VideoViewOutput
+import VideoViewCreateResult
 import VlcApi
 import VlcFlutterApi
 import android.util.Log
@@ -44,12 +39,11 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     // LibVLC
-    override fun createLibVlc(input: LibVlcInput, callback: (Result<LibVlcOutput>) -> Unit) {
+    override fun createLibVlc(options: List<String>?, callback: (Result<Long>) -> Unit) {
         Log.d(TAG, "createLibVlc()")
-        val options = input.options ?: emptyList()
-        val libVlc = LibVLC(binding.applicationContext, options.toMutableList())
-        val id = objectHelper.putObject(libVlc)
-        callback.invoke(Result.success(LibVlcOutput(id)))
+        val libVlc = LibVLC(binding.applicationContext, options?.toMutableList())
+        val libVlcId = objectHelper.putObject(libVlc)
+        callback.invoke(Result.success(libVlcId))
     }
 
     override fun disposeLibVlc(libVlcId: Long, callback: (Result<Boolean>) -> Unit) {
@@ -59,7 +53,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     // Media
-    override fun createMedia(input: MediaInput, callback: (Result<MediaOutput>) -> Unit) {
+    override fun createMedia(input: MediaCreateInput, callback: (Result<Long>) -> Unit) {
         Log.d(TAG, "createMedia()")
         val libVlc = objectHelper.getObject<LibVLC>(input.libVlcId ?: -1)
         val options = input.options
@@ -113,7 +107,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         }
 
         options?.forEach { media.addOption(it) }
-        callback.invoke(Result.success(MediaOutput(mediaId)))
+        callback.invoke(Result.success(mediaId))
     }
 
     override fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit) {
@@ -177,16 +171,16 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     // MediaPlayer
-    override fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit) {
+    override fun createMediaPlayer(libVlcId: Long, callback: (Result<Long>) -> Unit) {
         Log.d(TAG, "createMediaPlayer()")
-        val libVlc = objectHelper.getObject<LibVLC>(input.libVlcId ?: -1)
+        val libVlc = objectHelper.getObject<LibVLC>(libVlcId)
         if (libVlc == null) {
             callback.invoke(Result.failure(IllegalArgumentException()))
             return
         }
         val mediaPlayer = MediaPlayer(libVlc)
-        val id = objectHelper.putObject(mediaPlayer)
-        callback.invoke(Result.success(MediaPlayerOutput(id)))
+        val mediaPlayerId = objectHelper.putObject(mediaPlayer)
+        callback.invoke(Result.success(mediaPlayerId))
     }
 
     override fun mediaPlayerSetMedia(mediaPlayerId: Long, mediaId: Long, callback: (Result<Boolean>) -> Unit) {
@@ -306,12 +300,12 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     // Video View
-    override fun createVideoView(callback: (Result<VideoViewOutput>) -> Unit) {
+    override fun createVideoView(callback: (Result<VideoViewCreateResult>) -> Unit) {
         Log.d(TAG, "createVideoView()")
         val texture = binding.textureRegistry.createSurfaceTexture()
         val videoView = VideoView(texture)
         val videoViewId = objectHelper.putObject(videoView)
-        callback.invoke(Result.success(VideoViewOutput(objectId = videoViewId, textureId = texture.id())))
+        callback.invoke(Result.success(VideoViewCreateResult(objectId = videoViewId, textureId = texture.id())))
     }
 
     override fun videoViewSetDefaultBufferSize(videoViewId: Long, width: Long, height: Long, callback: (Result<Boolean>) -> Unit) {
