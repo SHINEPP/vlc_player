@@ -141,7 +141,73 @@ class VlcPlayerController {
 
   Widget buildView() => _videoView.buildView();
 
+  Future<void> play() async {
+    await prepared();
+    await _mediaPlayer.play();
+  }
+
+  Future<void> pause() async {
+    await prepared();
+    await _mediaPlayer.pause();
+  }
+
+  Future<void> stop() async {
+    await prepared();
+    await _mediaPlayer.stop();
+  }
+
+  Future<bool> isPlaying() async {
+    await prepared();
+    return await _mediaPlayer.isPlaying();
+  }
+
+  Future<void> setTime(Duration time, {bool fast = false}) async {
+    await prepared();
+    await _mediaPlayer.setTime(time, fast: fast);
+  }
+
+  Future<Duration> getTime() async {
+    await prepared();
+    return await _mediaPlayer.getTime();
+  }
+
+  Future<void> setPosition(double position, {bool fast = false}) async {
+    await prepared();
+    await _mediaPlayer.setPosition(position, fast: fast);
+  }
+
+  Future<double> getPosition() async {
+    await prepared();
+    return await _mediaPlayer.getPosition();
+  }
+
+  Future<Duration> getLength() async {
+    await prepared();
+    return await _mediaPlayer.getLength();
+  }
+
+  Future<void> setVolume(int volume) async {
+    await prepared();
+    await _mediaPlayer.setVolume(volume);
+  }
+
+  Future<int> getVolume() async {
+    await prepared();
+    return await _mediaPlayer.getVolume();
+  }
+
+  Future<void> setRate(double rate) async {
+    await prepared();
+    await _mediaPlayer.setRate(rate);
+  }
+
+  Future<double> getRate() async {
+    await prepared();
+    return await _mediaPlayer.getRate();
+  }
+
   Future<void> dispose() async {
+    await prepared();
     await _mediaPlayer.dispose();
     await _media.dispose();
     await _libVlc.dispose();

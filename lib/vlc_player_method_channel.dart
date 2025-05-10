@@ -37,13 +37,12 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   /// Media
   @override
-  Future<Media> createMedia(
-    LibVlc libVlc,
-    DataSource dataSource, {
-    String? packageName,
-    HwAcc? hwAcc,
-    List<String>? options,
-  }) async {
+  Future<Media> createMedia(LibVlc libVlc,
+      DataSource dataSource, {
+        String? packageName,
+        HwAcc? hwAcc,
+        List<String>? options,
+      }) async {
     final output = await _api.createMedia(
       MediaInput(
         libVlcId: libVlc.vlcId,
@@ -95,10 +94,8 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<bool> mediaPlayerAttachVideoView(
-    MediaPlayer mediaPlayer,
-    VideoView videoView,
-  ) async {
+  Future<bool> mediaPlayerAttachVideoView(MediaPlayer mediaPlayer,
+      VideoView videoView,) async {
     return await _api.mediaPlayerAttachVideoView(
       mediaPlayer.mediaPlayerId,
       videoView.videoViewId,
@@ -126,11 +123,26 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<void> mediaPlayerSetPosition(
-    MediaPlayer mediaPlayer,
-    double position,
-    bool fast,
-  ) async {
+  Future<void> mediaPlayerSetTime(MediaPlayer mediaPlayer,
+      Duration time,
+      bool fast,) async {
+    await _api.mediaPlayerSetTime(
+      mediaPlayer.mediaPlayerId,
+      time.inMilliseconds,
+      fast,
+    );
+  }
+
+  @override
+  Future<Duration> mediaPlayerGetTime(MediaPlayer mediaPlayer) async {
+    final time = await _api.mediaPlayerGetTime(mediaPlayer.mediaPlayerId);
+    return Duration(milliseconds: time);
+  }
+
+  @override
+  Future<void> mediaPlayerSetPosition(MediaPlayer mediaPlayer,
+      double position,
+      bool fast,) async {
     await _api.mediaPlayerSetPosition(
       mediaPlayer.mediaPlayerId,
       position,
@@ -183,11 +195,9 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<bool> videoViewSetDefaultBufferSize(
-    VideoView videoView,
-    int width,
-    int height,
-  ) async {
+  Future<bool> videoViewSetDefaultBufferSize(VideoView videoView,
+      int width,
+      int height,) async {
     return await _api.videoViewSetDefaultBufferSize(
       videoView.videoViewId,
       width,
