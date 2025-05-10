@@ -91,6 +91,76 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     throw UnimplementedError('mediaPlayerPlay() has not been implemented.');
   }
 
+  Future<void> mediaPlayerPause(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError('mediaPlayerPause() has not been implemented.');
+  }
+
+  Future<void> mediaPlayerStop(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError('mediaPlayerStop() has not been implemented.');
+  }
+
+  Future<bool> mediaPlayerIsPlaying(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError(
+      'mediaPlayerIsPlaying() has not been implemented.',
+    );
+  }
+
+  Future<void> mediaPlayerSetTime(
+    MediaPlayer mediaPlayer,
+    Duration time,
+    bool fast,
+  ) async {
+    throw UnimplementedError('mediaPlayerSetTime() has not been implemented.');
+  }
+
+  Future<Duration> mediaPlayerGetTime(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError('mediaPlayerGetTime() has not been implemented.');
+  }
+
+  Future<void> mediaPlayerSetPosition(
+    MediaPlayer mediaPlayer,
+    double position,
+    bool fast,
+  ) async {
+    throw UnimplementedError(
+      'mediaPlayerSetPosition() has not been implemented.',
+    );
+  }
+
+  Future<double> mediaPlayerGetPosition(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError(
+      'mediaPlayerGetPosition() has not been implemented.',
+    );
+  }
+
+  Future<Duration> mediaPlayerGetLength(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError(
+      'mediaPlayerGetDuration() has not been implemented.',
+    );
+  }
+
+  Future<void> mediaPlayerSetVolume(MediaPlayer mediaPlayer, int volume) async {
+    throw UnimplementedError(
+      'mediaPlayerSetVolume() has not been implemented.',
+    );
+  }
+
+  Future<int> mediaPlayerGetVolume(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError(
+      'mediaPlayerGetVolume() has not been implemented.',
+    );
+  }
+
+  Future<void> mediaPlayerSetRate(MediaPlayer mediaPlayer, double rate) async {
+    throw UnimplementedError('mediaPlayerSetRate() has not been implemented.');
+  }
+
+  Future<double> mediaPlayerGetRate(MediaPlayer mediaPlayer) async {
+    throw UnimplementedError(
+      'mediaPlayerGetRate() has not been implemented.',
+    );
+  }
+
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
   }

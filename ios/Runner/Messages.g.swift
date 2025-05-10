@@ -476,6 +476,18 @@ protocol VlcApi {
   func mediaPlayerSetMedia(mediaPlayerId: Int64, mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaPlayerAttachVideoView(mediaPlayerId: Int64, videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaPlayerPlay(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  func mediaPlayerPause(mediaPlayerId: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerStop(mediaPlayerId: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerIsPlaying(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  func mediaPlayerSetTime(mediaPlayerId: Int64, time: Int64, fast: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerGetTime(mediaPlayerId: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
+  func mediaPlayerSetPosition(mediaPlayerId: Int64, position: Double, fast: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerGetPosition(mediaPlayerId: Int64, completion: @escaping (Result<Double, Error>) -> Void)
+  func mediaPlayerGetLength(mediaPlayerId: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
+  func mediaPlayerSetVolume(mediaPlayerId: Int64, volume: Int64, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerGetVolume(mediaPlayerId: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
+  func mediaPlayerSetRate(mediaPlayerId: Int64, rate: Double, completion: @escaping (Result<Void, Error>) -> Void)
+  func mediaPlayerGetRate(mediaPlayerId: Int64, completion: @escaping (Result<Double, Error>) -> Void)
   func disposeMediaPlayer(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Video View
   func createVideoView(completion: @escaping (Result<VideoViewOutput, Error>) -> Void)
@@ -680,6 +692,216 @@ class VlcApiSetup {
       }
     } else {
       mediaPlayerPlayChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerPauseChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPause\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerPauseChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerPause(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerPauseChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerStopChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerStop\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerStopChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerStop(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerStopChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerIsPlayingChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerIsPlaying\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerIsPlayingChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerIsPlaying(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerIsPlayingChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerSetTimeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetTime\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerSetTimeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let timeArg = args[1] as! Int64
+        let fastArg = args[2] as! Bool
+        api.mediaPlayerSetTime(mediaPlayerId: mediaPlayerIdArg, time: timeArg, fast: fastArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerSetTimeChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerGetTimeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetTime\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerGetTimeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerGetTime(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerGetTimeChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerSetPositionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetPosition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerSetPositionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let positionArg = args[1] as! Double
+        let fastArg = args[2] as! Bool
+        api.mediaPlayerSetPosition(mediaPlayerId: mediaPlayerIdArg, position: positionArg, fast: fastArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerSetPositionChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerGetPositionChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetPosition\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerGetPositionChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerGetPosition(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerGetPositionChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerGetLengthChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetLength\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerGetLengthChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerGetLength(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerGetLengthChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerSetVolumeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetVolume\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerSetVolumeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let volumeArg = args[1] as! Int64
+        api.mediaPlayerSetVolume(mediaPlayerId: mediaPlayerIdArg, volume: volumeArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerSetVolumeChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerGetVolumeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetVolume\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerGetVolumeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerGetVolume(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerGetVolumeChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerSetRateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetRate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerSetRateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let rateArg = args[1] as! Double
+        api.mediaPlayerSetRate(mediaPlayerId: mediaPlayerIdArg, rate: rateArg) { result in
+          switch result {
+          case .success:
+            reply(wrapResult(nil))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerSetRateChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerGetRateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetRate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerGetRateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerGetRate(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerGetRateChannel.setMessageHandler(nil)
     }
     let disposeMediaPlayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMediaPlayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

@@ -215,6 +215,90 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         callback.invoke(Result.success(true))
     }
 
+    override fun mediaPlayerPause(mediaPlayerId: Long, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerPause()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.pause()
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerStop(mediaPlayerId: Long, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerStop()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.stop()
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerIsPlaying(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "mediaPlayerIsPlaying()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val isPlaying = mediaPlayer?.isPlaying ?: false
+        callback.invoke(Result.success(isPlaying))
+    }
+
+    override fun mediaPlayerSetTime(mediaPlayerId: Long, time: Long, fast: Boolean, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerSetTime()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.setTime(time, fast)
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerGetTime(mediaPlayerId: Long, callback: (Result<Long>) -> Unit) {
+        Log.d(TAG, "mediaPlayerGetTime()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val time = mediaPlayer?.time ?: 0L
+        callback.invoke(Result.success(time))
+    }
+
+    override fun mediaPlayerSetPosition(mediaPlayerId: Long, position: Double, fast: Boolean, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerSetPosition()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.setPosition(position.toFloat(), fast)
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerGetPosition(mediaPlayerId: Long, callback: (Result<Double>) -> Unit) {
+        Log.d(TAG, "mediaPlayerGetPosition()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val position = mediaPlayer?.position ?: 0f
+        callback.invoke(Result.success(position.toDouble()))
+    }
+
+    override fun mediaPlayerGetLength(mediaPlayerId: Long, callback: (Result<Long>) -> Unit) {
+        Log.d(TAG, "mediaPlayerGetLength()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val length = mediaPlayer?.length ?: 0
+        callback.invoke(Result.success(length))
+    }
+
+    override fun mediaPlayerSetVolume(mediaPlayerId: Long, volume: Long, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerSetVolume()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.volume = volume.toInt()
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerGetVolume(mediaPlayerId: Long, callback: (Result<Long>) -> Unit) {
+        Log.d(TAG, "mediaPlayerGetVolume()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val volume = mediaPlayer?.volume ?: 100
+        callback.invoke(Result.success(volume.toLong()))
+    }
+
+    override fun mediaPlayerSetRate(mediaPlayerId: Long, rate: Double, callback: (Result<Unit>) -> Unit) {
+        Log.d(TAG, "mediaPlayerSetRate()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.rate = rate.toFloat()
+        callback.invoke(Result.success(Unit))
+    }
+
+    override fun mediaPlayerGetRate(mediaPlayerId: Long, callback: (Result<Double>) -> Unit) {
+        Log.d(TAG, "mediaPlayerGetRate()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val rate = mediaPlayer?.rate ?: 1f
+        callback.invoke(Result.success(rate.toDouble()))
+    }
+
     override fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit) {
         Log.d(TAG, "disposeMediaPlayer()")
         objectHelper.removeObject<MediaPlayer>(mediaPlayerId)?.release()

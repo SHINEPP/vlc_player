@@ -105,6 +105,18 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 - (void)mediaPlayerSetMediaMediaPlayerId:(NSInteger)mediaPlayerId mediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaPlayerAttachVideoViewMediaPlayerId:(NSInteger)mediaPlayerId videoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaPlayerPlayMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerPauseMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerStopMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerIsPlayingMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerSetTimeMediaPlayerId:(NSInteger)mediaPlayerId time:(NSInteger)time fast:(BOOL)fast completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerGetTimeMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerSetPositionMediaPlayerId:(NSInteger)mediaPlayerId position:(double)position fast:(BOOL)fast completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerGetPositionMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerGetLengthMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerSetVolumeMediaPlayerId:(NSInteger)mediaPlayerId volume:(NSInteger)volume completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerGetVolumeMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerSetRateMediaPlayerId:(NSInteger)mediaPlayerId rate:(double)rate completion:(void (^)(FlutterError *_Nullable))completion;
+- (void)mediaPlayerGetRateMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaPlayerMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// Video View
 - (void)createVideoViewWithCompletion:(void (^)(VLC_PLAYERVideoViewOutput *_Nullable, FlutterError *_Nullable))completion;

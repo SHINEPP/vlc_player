@@ -104,6 +104,42 @@ abstract class VlcApi {
   bool mediaPlayerPlay(int mediaPlayerId);
 
   @async
+  void mediaPlayerPause(int mediaPlayerId);
+
+  @async
+  void mediaPlayerStop(int mediaPlayerId);
+
+  @async
+  bool mediaPlayerIsPlaying(int mediaPlayerId);
+
+  @async
+  void mediaPlayerSetTime(int mediaPlayerId, int time, bool fast);
+
+  @async
+  int mediaPlayerGetTime(int mediaPlayerId);
+
+  @async
+  void mediaPlayerSetPosition(int mediaPlayerId, double position, bool fast);
+
+  @async
+  double mediaPlayerGetPosition(int mediaPlayerId);
+
+  @async
+  int mediaPlayerGetLength(int mediaPlayerId);
+
+  @async
+  void mediaPlayerSetVolume(int mediaPlayerId, int volume);
+
+  @async
+  int mediaPlayerGetVolume(int mediaPlayerId);
+
+  @async
+  void mediaPlayerSetRate(int mediaPlayerId, double rate);
+
+  @async
+  double mediaPlayerGetRate(int mediaPlayerId);
+
+  @async
   bool disposeMediaPlayer(int mediaPlayerId);
 
   /// Video View

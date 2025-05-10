@@ -111,6 +111,67 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
+  Future<void> mediaPlayerPause(MediaPlayer mediaPlayer) async {
+    await _api.mediaPlayerPause(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
+  Future<void> mediaPlayerStop(MediaPlayer mediaPlayer) async {
+    await _api.mediaPlayerStop(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
+  Future<bool> mediaPlayerIsPlaying(MediaPlayer mediaPlayer) async {
+    return await _api.mediaPlayerIsPlaying(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
+  Future<void> mediaPlayerSetPosition(
+    MediaPlayer mediaPlayer,
+    double position,
+    bool fast,
+  ) async {
+    await _api.mediaPlayerSetPosition(
+      mediaPlayer.mediaPlayerId,
+      position,
+      fast,
+    );
+  }
+
+  @override
+  Future<double> mediaPlayerGetPosition(MediaPlayer mediaPlayer) async {
+    return await _api.mediaPlayerGetPosition(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
+  Future<Duration> mediaPlayerGetLength(MediaPlayer mediaPlayer) async {
+    final milliseconds = await _api.mediaPlayerGetLength(
+      mediaPlayer.mediaPlayerId,
+    );
+    return Duration(milliseconds: milliseconds);
+  }
+
+  @override
+  Future<void> mediaPlayerSetVolume(MediaPlayer mediaPlayer, int volume) async {
+    await _api.mediaPlayerSetVolume(mediaPlayer.mediaPlayerId, volume);
+  }
+
+  @override
+  Future<int> mediaPlayerGetVolume(MediaPlayer mediaPlayer) async {
+    return await _api.mediaPlayerGetVolume(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
+  Future<void> mediaPlayerSetRate(MediaPlayer mediaPlayer, double rate) async {
+    await _api.mediaPlayerSetRate(mediaPlayer.mediaPlayerId, rate);
+  }
+
+  @override
+  Future<double> mediaPlayerGetRate(MediaPlayer mediaPlayer) async {
+    return await _api.mediaPlayerGetRate(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     return await _api.disposeMediaPlayer(mediaPlayer.mediaPlayerId);
   }
