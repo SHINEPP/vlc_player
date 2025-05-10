@@ -102,9 +102,13 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 - (void)disposeMediaMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// MediaPlayer
 - (void)createMediaPlayerInput:(VLC_PLAYERMediaPlayerInput *)input completion:(void (^)(VLC_PLAYERMediaPlayerOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerSetMediaMediaPlayerId:(NSInteger)mediaPlayerId mediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerAttachVideoViewMediaPlayerId:(NSInteger)mediaPlayerId videoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaPlayerPlayMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaPlayerMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// Video View
 - (void)createVideoViewWithCompletion:(void (^)(VLC_PLAYERVideoViewOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)videoViewSetDefaultBufferSizeVideoViewId:(NSInteger)videoViewId width:(NSInteger)width height:(NSInteger)height completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeVideoViewVideoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 @end
 

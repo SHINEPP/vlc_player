@@ -16,6 +16,14 @@ class VideoView {
     );
   }
 
+  Future<void> setDefaultBufferSize(int width, int height) async {
+    await VlcPlayerPlatform.instance.videoViewSetDefaultBufferSize(
+      this,
+      width,
+      height,
+    );
+  }
+
   Widget buildView() {
     return VlcPlayerPlatform.instance.buildVideoView(this);
   }

@@ -87,6 +87,30 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
+  Future<bool> mediaPlayerSetMedia(MediaPlayer mediaPlayer, Media media) async {
+    return await _api.mediaPlayerSetMedia(
+      mediaPlayer.mediaPlayerId,
+      media.mediaId,
+    );
+  }
+
+  @override
+  Future<bool> mediaPlayerAttachVideoView(
+    MediaPlayer mediaPlayer,
+    VideoView videoView,
+  ) async {
+    return await _api.mediaPlayerAttachVideoView(
+      mediaPlayer.mediaPlayerId,
+      videoView.videoViewId,
+    );
+  }
+
+  @override
+  Future<bool> mediaPlayerPlay(MediaPlayer mediaPlayer) async {
+    return await _api.mediaPlayerPlay(mediaPlayer.mediaPlayerId);
+  }
+
+  @override
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     return await _api.disposeMediaPlayer(mediaPlayer.mediaPlayerId);
   }
@@ -98,8 +122,16 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<bool> disposeVideoView(VideoView videoView) async {
-    return await _api.disposeVideoView(videoView.videoViewId);
+  Future<bool> videoViewSetDefaultBufferSize(
+    VideoView videoView,
+    int width,
+    int height,
+  ) async {
+    return await _api.videoViewSetDefaultBufferSize(
+      videoView.videoViewId,
+      width,
+      height,
+    );
   }
 
   @override
@@ -122,5 +154,10 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
       );
     }
     return Container();
+  }
+
+  @override
+  Future<bool> disposeVideoView(VideoView videoView) async {
+    return await _api.disposeVideoView(videoView.videoViewId);
   }
 }

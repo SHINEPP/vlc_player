@@ -473,9 +473,13 @@ protocol VlcApi {
   func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// MediaPlayer
   func createMediaPlayer(input: MediaPlayerInput, completion: @escaping (Result<MediaPlayerOutput, Error>) -> Void)
+  func mediaPlayerSetMedia(mediaPlayerId: Int64, mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  func mediaPlayerAttachVideoView(mediaPlayerId: Int64, videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  func mediaPlayerPlay(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func disposeMediaPlayer(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Video View
   func createVideoView(completion: @escaping (Result<VideoViewOutput, Error>) -> Void)
+  func videoViewSetDefaultBufferSize(videoViewId: Int64, width: Int64, height: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func disposeVideoView(videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
@@ -624,6 +628,59 @@ class VlcApiSetup {
     } else {
       createMediaPlayerChannel.setMessageHandler(nil)
     }
+    let mediaPlayerSetMediaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetMedia\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerSetMediaChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let mediaIdArg = args[1] as! Int64
+        api.mediaPlayerSetMedia(mediaPlayerId: mediaPlayerIdArg, mediaId: mediaIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerSetMediaChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerAttachVideoViewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerAttachVideoView\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerAttachVideoViewChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        let videoViewIdArg = args[1] as! Int64
+        api.mediaPlayerAttachVideoView(mediaPlayerId: mediaPlayerIdArg, videoViewId: videoViewIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerAttachVideoViewChannel.setMessageHandler(nil)
+    }
+    let mediaPlayerPlayChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPlay\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaPlayerPlayChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaPlayerIdArg = args[0] as! Int64
+        api.mediaPlayerPlay(mediaPlayerId: mediaPlayerIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaPlayerPlayChannel.setMessageHandler(nil)
+    }
     let disposeMediaPlayerChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMediaPlayer\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
       disposeMediaPlayerChannel.setMessageHandler { message, reply in
@@ -656,6 +713,25 @@ class VlcApiSetup {
       }
     } else {
       createVideoViewChannel.setMessageHandler(nil)
+    }
+    let videoViewSetDefaultBufferSizeChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.videoViewSetDefaultBufferSize\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      videoViewSetDefaultBufferSizeChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let videoViewIdArg = args[0] as! Int64
+        let widthArg = args[1] as! Int64
+        let heightArg = args[2] as! Int64
+        api.videoViewSetDefaultBufferSize(videoViewId: videoViewIdArg, width: widthArg, height: heightArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      videoViewSetDefaultBufferSizeChannel.setMessageHandler(nil)
     }
     let disposeVideoViewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeVideoView\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

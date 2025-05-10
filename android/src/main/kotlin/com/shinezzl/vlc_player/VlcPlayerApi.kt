@@ -189,6 +189,32 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         callback.invoke(Result.success(MediaPlayerOutput(id)))
     }
 
+    override fun mediaPlayerSetMedia(mediaPlayerId: Long, mediaId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "mediaPlayerSetMedia()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val media = objectHelper.getObject<Media>(mediaId)
+        mediaPlayer?.media = media
+        callback.invoke(Result.success(true))
+    }
+
+    override fun mediaPlayerAttachVideoView(mediaPlayerId: Long, videoViewId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "mediaPlayerAttachVideoView()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        val videoView = objectHelper.getObject<VideoView>(videoViewId)
+        val vlcOut = mediaPlayer?.vlcVout
+        vlcOut?.setVideoSurface(videoView?.textureView?.surfaceTexture())
+        vlcOut?.attachViews()
+        mediaPlayer?.setVideoTrackEnabled(true)
+        callback.invoke(Result.success(true))
+    }
+
+    override fun mediaPlayerPlay(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "mediaPlayerPlay()")
+        val mediaPlayer = objectHelper.getObject<MediaPlayer>(mediaPlayerId)
+        mediaPlayer?.play()
+        callback.invoke(Result.success(true))
+    }
+
     override fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit) {
         Log.d(TAG, "disposeMediaPlayer()")
         objectHelper.removeObject<MediaPlayer>(mediaPlayerId)?.release()
@@ -202,6 +228,12 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
         val videoView = VideoView(texture)
         val videoViewId = objectHelper.putObject(videoView)
         callback.invoke(Result.success(VideoViewOutput(objectId = videoViewId, textureId = texture.id())))
+    }
+
+    override fun videoViewSetDefaultBufferSize(videoViewId: Long, width: Long, height: Long, callback: (Result<Boolean>) -> Unit) {
+        val videoView = objectHelper.getObject<VideoView>(videoViewId)
+        videoView?.textureView?.surfaceTexture()?.setDefaultBufferSize(width.toInt(), height.toInt())
+        callback.invoke(Result.success(true))
     }
 
     override fun disposeVideoView(videoViewId: Long, callback: (Result<Boolean>) -> Unit) {

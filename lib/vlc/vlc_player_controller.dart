@@ -40,6 +40,8 @@ class VlcPlayerController {
   late Media _media;
   late VideoView _videoView;
 
+  VideoTrack? _videoTrack;
+
   final _initCompleter = Completer<bool>();
 
   VlcPlayerController({
@@ -108,14 +110,34 @@ class VlcPlayerController {
     _libVlc = await LibVlc.create();
     _mediaPlayer = await MediaPlayer.create(_libVlc);
     _media = await Media.create(libVlc: _libVlc, dataSource: dataSource);
-    _videoView = await VideoView.create();
     await _media.parseAsync();
+    final videoTrack = await _media.getVideoTrack();
+    _videoTrack = videoTrack;
+    final width = videoTrack.width > 0 ? videoTrack.width : 1920;
+    final height = videoTrack.height > 0 ? videoTrack.height : 1080;
+    _videoView = await VideoView.create();
+    _videoView.setDefaultBufferSize(width, height);
+    await _mediaPlayer.attachVideoView(_videoView);
+    await _mediaPlayer.setMedia(_media);
     _initCompleter.complete(true);
+
+    if (autoPlay) {
+      _mediaPlayer.play();
+    }
   }
 
   Future<bool> prepared() async => _initCompleter.future;
 
   bool isPrepared() => _initCompleter.isCompleted;
+
+  double aspectRatio() {
+    final w = _videoTrack?.width ?? 0;
+    final h = _videoTrack?.height ?? 0;
+    if (w < 0 || h < 0) {
+      return 1.9;
+    }
+    return w / h;
+  }
 
   Widget buildView() => _videoView.buildView();
 

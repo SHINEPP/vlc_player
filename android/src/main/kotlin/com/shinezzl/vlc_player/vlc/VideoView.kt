@@ -1,8 +1,8 @@
 package com.shinezzl.vlc_player.vlc
 
-import io.flutter.view.TextureRegistry.TextureEntry
+import io.flutter.view.TextureRegistry.SurfaceTextureEntry
 
-class VideoView(private val textureView: TextureEntry) {
+class VideoView(val textureView: SurfaceTextureEntry) {
 
     fun release() {
         textureView.release()

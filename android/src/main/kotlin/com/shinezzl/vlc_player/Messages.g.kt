@@ -444,9 +444,13 @@ interface VlcApi {
   fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   /** MediaPlayer */
   fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit)
+  fun mediaPlayerSetMedia(mediaPlayerId: Long, mediaId: Long, callback: (Result<Boolean>) -> Unit)
+  fun mediaPlayerAttachVideoView(mediaPlayerId: Long, videoViewId: Long, callback: (Result<Boolean>) -> Unit)
+  fun mediaPlayerPlay(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit)
   fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit)
   /** Video View */
   fun createVideoView(callback: (Result<VideoViewOutput>) -> Unit)
+  fun videoViewSetDefaultBufferSize(videoViewId: Long, width: Long, height: Long, callback: (Result<Boolean>) -> Unit)
   fun disposeVideoView(videoViewId: Long, callback: (Result<Boolean>) -> Unit)
 
   companion object {
@@ -619,6 +623,68 @@ interface VlcApi {
         }
       }
       run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetMedia$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaPlayerIdArg = args[0] as Long
+            val mediaIdArg = args[1] as Long
+            api.mediaPlayerSetMedia(mediaPlayerIdArg, mediaIdArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerAttachVideoView$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaPlayerIdArg = args[0] as Long
+            val videoViewIdArg = args[1] as Long
+            api.mediaPlayerAttachVideoView(mediaPlayerIdArg, videoViewIdArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPlay$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaPlayerIdArg = args[0] as Long
+            api.mediaPlayerPlay(mediaPlayerIdArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMediaPlayer$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
@@ -643,6 +709,28 @@ interface VlcApi {
         if (api != null) {
           channel.setMessageHandler { _, reply ->
             api.createVideoView{ result: Result<VideoViewOutput> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.videoViewSetDefaultBufferSize$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val videoViewIdArg = args[0] as Long
+            val widthArg = args[1] as Long
+            val heightArg = args[2] as Long
+            api.videoViewSetDefaultBufferSize(videoViewIdArg, widthArg, heightArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

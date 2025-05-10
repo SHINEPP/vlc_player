@@ -39,7 +39,7 @@ class _VlcVideoPlayerState extends State<VlcVideoPlayer> {
     return Container(
       color: Colors.black,
       child: AspectRatio(
-        aspectRatio: 1.9,
+        aspectRatio: _controller.aspectRatio(),
         child: Stack(fit: StackFit.expand, children: [_controller.buildView()]),
       ),
     );

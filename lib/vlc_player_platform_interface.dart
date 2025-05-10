@@ -74,6 +74,23 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     throw UnimplementedError('createMediaPlayer() has not been implemented.');
   }
 
+  Future<bool> mediaPlayerSetMedia(MediaPlayer mediaPlayer, Media media) async {
+    throw UnimplementedError('mediaPlayerSetMedia() has not been implemented.');
+  }
+
+  Future<bool> mediaPlayerAttachVideoView(
+    MediaPlayer mediaPlayer,
+    VideoView videoView,
+  ) {
+    throw UnimplementedError(
+      'mediaPlayerAttachVideoView() has not been implemented.',
+    );
+  }
+
+  Future<bool> mediaPlayerPlay(MediaPlayer mediaPlayer) {
+    throw UnimplementedError('mediaPlayerPlay() has not been implemented.');
+  }
+
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
   }
@@ -83,11 +100,21 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     throw UnimplementedError('createVideoView() has not been implemented.');
   }
 
-  Future<bool> disposeVideoView(VideoView videoView) async {
-    throw UnimplementedError('disposeVideoView() has not been implemented.');
+  Future<bool> videoViewSetDefaultBufferSize(
+    VideoView videoView,
+    int width,
+    int height,
+  ) async {
+    throw UnimplementedError(
+      'videoViewSetDefaultBufferSize() has not been implemented.',
+    );
   }
 
   Widget buildVideoView(VideoView videoView) {
     throw UnimplementedError('buildVideoView() has not been implemented.');
+  }
+
+  Future<bool> disposeVideoView(VideoView videoView) async {
+    throw UnimplementedError('disposeVideoView() has not been implemented.');
   }
 }

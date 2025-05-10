@@ -95,11 +95,23 @@ abstract class VlcApi {
   MediaPlayerOutput createMediaPlayer(MediaPlayerInput input);
 
   @async
+  bool mediaPlayerSetMedia(int mediaPlayerId, int mediaId);
+
+  @async
+  bool mediaPlayerAttachVideoView(int mediaPlayerId, int videoViewId);
+
+  @async
+  bool mediaPlayerPlay(int mediaPlayerId);
+
+  @async
   bool disposeMediaPlayer(int mediaPlayerId);
 
   /// Video View
   @async
   VideoViewOutput createVideoView();
+
+  @async
+  bool videoViewSetDefaultBufferSize(int videoViewId, int width, int height);
 
   @async
   bool disposeVideoView(int videoViewId);

@@ -548,6 +548,65 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
   {
     FlutterBasicMessageChannel *channel =
       [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetMedia", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(mediaPlayerSetMediaMediaPlayerId:mediaId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(mediaPlayerSetMediaMediaPlayerId:mediaId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaPlayerId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        NSInteger arg_mediaId = [GetNullableObjectAtIndex(args, 1) integerValue];
+        [api mediaPlayerSetMediaMediaPlayerId:arg_mediaPlayerId mediaId:arg_mediaId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerAttachVideoView", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(mediaPlayerAttachVideoViewMediaPlayerId:videoViewId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(mediaPlayerAttachVideoViewMediaPlayerId:videoViewId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaPlayerId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        NSInteger arg_videoViewId = [GetNullableObjectAtIndex(args, 1) integerValue];
+        [api mediaPlayerAttachVideoViewMediaPlayerId:arg_mediaPlayerId videoViewId:arg_videoViewId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPlay", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(mediaPlayerPlayMediaPlayerId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(mediaPlayerPlayMediaPlayerId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaPlayerId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        [api mediaPlayerPlayMediaPlayerId:arg_mediaPlayerId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
         initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMediaPlayer", messageChannelSuffix]
         binaryMessenger:binaryMessenger
         codec:VLC_PLAYERGetMessagesCodec()];
@@ -575,6 +634,27 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
       NSCAssert([api respondsToSelector:@selector(createVideoViewWithCompletion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createVideoViewWithCompletion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         [api createVideoViewWithCompletion:^(VLC_PLAYERVideoViewOutput *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.videoViewSetDefaultBufferSize", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(videoViewSetDefaultBufferSizeVideoViewId:width:height:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(videoViewSetDefaultBufferSizeVideoViewId:width:height:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_videoViewId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        NSInteger arg_width = [GetNullableObjectAtIndex(args, 1) integerValue];
+        NSInteger arg_height = [GetNullableObjectAtIndex(args, 2) integerValue];
+        [api videoViewSetDefaultBufferSizeVideoViewId:arg_videoViewId width:arg_width height:arg_height completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
