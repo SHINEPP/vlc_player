@@ -15,7 +15,6 @@ import 'package:pigeon/pigeon.dart';
     dartPackageName: 'com.shinezzl.vlc_player',
   ),
 )
-
 // Media
 class MediaCreateInput {
   int? libVlcId;
@@ -38,6 +37,18 @@ class MediaVideoTrack {
   int? projection;
 }
 
+class MediaAudioTrack {
+  int? trackId;
+  int? channels;
+  int? rate;
+  String? description;
+}
+
+class MediaSubtitleTrack {
+  int? trackId;
+  String? encoding;
+  String? description;
+}
 
 // Video View
 class VideoViewCreateResult {
@@ -66,6 +77,12 @@ abstract class VlcApi {
 
   @async
   MediaVideoTrack mediaGetVideoTrack(int mediaId);
+
+  @async
+  List<MediaAudioTrack> mediaGetAudioTrack(int mediaId);
+
+  @async
+  List<MediaSubtitleTrack> mediaGetSubtitleTrack(int mediaId);
 
   @async
   bool disposeMedia(int mediaId);

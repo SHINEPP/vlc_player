@@ -235,6 +235,76 @@ struct MediaVideoTrack: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
+struct MediaAudioTrack: Hashable {
+  var trackId: Int64? = nil
+  var channels: Int64? = nil
+  var rate: Int64? = nil
+  var description: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MediaAudioTrack? {
+    let trackId: Int64? = nilOrValue(pigeonVar_list[0])
+    let channels: Int64? = nilOrValue(pigeonVar_list[1])
+    let rate: Int64? = nilOrValue(pigeonVar_list[2])
+    let description: String? = nilOrValue(pigeonVar_list[3])
+
+    return MediaAudioTrack(
+      trackId: trackId,
+      channels: channels,
+      rate: rate,
+      description: description
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      trackId,
+      channels,
+      rate,
+      description,
+    ]
+  }
+  static func == (lhs: MediaAudioTrack, rhs: MediaAudioTrack) -> Bool {
+    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
+struct MediaSubtitleTrack: Hashable {
+  var trackId: Int64? = nil
+  var encoding: String? = nil
+  var description: String? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> MediaSubtitleTrack? {
+    let trackId: Int64? = nilOrValue(pigeonVar_list[0])
+    let encoding: String? = nilOrValue(pigeonVar_list[1])
+    let description: String? = nilOrValue(pigeonVar_list[2])
+
+    return MediaSubtitleTrack(
+      trackId: trackId,
+      encoding: encoding,
+      description: description
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      trackId,
+      encoding,
+      description,
+    ]
+  }
+  static func == (lhs: MediaSubtitleTrack, rhs: MediaSubtitleTrack) -> Bool {
+    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMessages(value: toList(), hasher: &hasher)
+  }
+}
+
+/// Generated class from Pigeon that represents data sent in messages.
 struct VideoViewCreateResult: Hashable {
   var objectId: Int64? = nil
   var textureId: Int64? = nil
@@ -271,6 +341,10 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
     case 130:
       return MediaVideoTrack.fromList(self.readValue() as! [Any?])
     case 131:
+      return MediaAudioTrack.fromList(self.readValue() as! [Any?])
+    case 132:
+      return MediaSubtitleTrack.fromList(self.readValue() as! [Any?])
+    case 133:
       return VideoViewCreateResult.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
@@ -286,8 +360,14 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
     } else if let value = value as? MediaVideoTrack {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? VideoViewCreateResult {
+    } else if let value = value as? MediaAudioTrack {
       super.writeByte(131)
+      super.writeValue(value.toList())
+    } else if let value = value as? MediaSubtitleTrack {
+      super.writeByte(132)
+      super.writeValue(value.toList())
+    } else if let value = value as? VideoViewCreateResult {
+      super.writeByte(133)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -320,6 +400,8 @@ protocol VlcApi {
   func setMediaEventListener(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaParseAsync(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaGetVideoTrack(mediaId: Int64, completion: @escaping (Result<MediaVideoTrack, Error>) -> Void)
+  func mediaGetAudioTrack(mediaId: Int64, completion: @escaping (Result<[MediaAudioTrack], Error>) -> Void)
+  func mediaGetSubtitleTrack(mediaId: Int64, completion: @escaping (Result<[MediaSubtitleTrack], Error>) -> Void)
   func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// MediaPlayer
   func createMediaPlayer(libVlcId: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
@@ -454,6 +536,40 @@ class VlcApiSetup {
       }
     } else {
       mediaGetVideoTrackChannel.setMessageHandler(nil)
+    }
+    let mediaGetAudioTrackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetAudioTrack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaGetAudioTrackChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaIdArg = args[0] as! Int64
+        api.mediaGetAudioTrack(mediaId: mediaIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaGetAudioTrackChannel.setMessageHandler(nil)
+    }
+    let mediaGetSubtitleTrackChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetSubtitleTrack\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      mediaGetSubtitleTrackChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let mediaIdArg = args[0] as! Int64
+        api.mediaGetSubtitleTrack(mediaId: mediaIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      mediaGetSubtitleTrackChannel.setMessageHandler(nil)
     }
     let disposeMediaChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMedia\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {

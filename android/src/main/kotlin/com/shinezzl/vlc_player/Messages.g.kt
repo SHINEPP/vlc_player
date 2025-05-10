@@ -176,6 +176,77 @@ data class MediaVideoTrack (
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
+data class MediaAudioTrack (
+  val trackId: Long? = null,
+  val channels: Long? = null,
+  val rate: Long? = null,
+  val description: String? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MediaAudioTrack {
+      val trackId = pigeonVar_list[0] as Long?
+      val channels = pigeonVar_list[1] as Long?
+      val rate = pigeonVar_list[2] as Long?
+      val description = pigeonVar_list[3] as String?
+      return MediaAudioTrack(trackId, channels, rate, description)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      trackId,
+      channels,
+      rate,
+      description,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MediaAudioTrack) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class MediaSubtitleTrack (
+  val trackId: Long? = null,
+  val encoding: String? = null,
+  val description: String? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): MediaSubtitleTrack {
+      val trackId = pigeonVar_list[0] as Long?
+      val encoding = pigeonVar_list[1] as String?
+      val description = pigeonVar_list[2] as String?
+      return MediaSubtitleTrack(trackId, encoding, description)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      trackId,
+      encoding,
+      description,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is MediaSubtitleTrack) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
+
+/** Generated class from Pigeon that represents data sent in messages. */
 data class VideoViewCreateResult (
   val objectId: Long? = null,
   val textureId: Long? = null
@@ -220,6 +291,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
+          MediaAudioTrack.fromList(it)
+        }
+      }
+      132.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          MediaSubtitleTrack.fromList(it)
+        }
+      }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
           VideoViewCreateResult.fromList(it)
         }
       }
@@ -236,8 +317,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is VideoViewCreateResult -> {
+      is MediaAudioTrack -> {
         stream.write(131)
+        writeValue(stream, value.toList())
+      }
+      is MediaSubtitleTrack -> {
+        stream.write(132)
+        writeValue(stream, value.toList())
+      }
+      is VideoViewCreateResult -> {
+        stream.write(133)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -256,6 +345,8 @@ interface VlcApi {
   fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaGetVideoTrack(mediaId: Long, callback: (Result<MediaVideoTrack>) -> Unit)
+  fun mediaGetAudioTrack(mediaId: Long, callback: (Result<List<MediaAudioTrack>>) -> Unit)
+  fun mediaGetSubtitleTrack(mediaId: Long, callback: (Result<List<MediaSubtitleTrack>>) -> Unit)
   fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   /** MediaPlayer */
   fun createMediaPlayer(libVlcId: Long, callback: (Result<Long>) -> Unit)
@@ -396,6 +487,46 @@ interface VlcApi {
             val args = message as List<Any?>
             val mediaIdArg = args[0] as Long
             api.mediaGetVideoTrack(mediaIdArg) { result: Result<MediaVideoTrack> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetAudioTrack$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaIdArg = args[0] as Long
+            api.mediaGetAudioTrack(mediaIdArg) { result: Result<List<MediaAudioTrack>> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetSubtitleTrack$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val mediaIdArg = args[0] as Long
+            api.mediaGetSubtitleTrack(mediaIdArg) { result: Result<List<MediaSubtitleTrack>> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

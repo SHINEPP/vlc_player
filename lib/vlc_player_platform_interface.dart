@@ -65,6 +65,16 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
     throw UnimplementedError('mediaGetVideoTrack() has not been implemented.');
   }
 
+  Future<List<MediaAudioTrack>> mediaGetAudioTrack(Media media) async {
+    throw UnimplementedError('mediaGetAudioTrack() has not been implemented.');
+  }
+
+  Future<List<MediaSubtitleTrack>> mediaGetSubtitleTrack(Media media) async {
+    throw UnimplementedError(
+      'mediaGetSubtitleTrack() has not been implemented.',
+    );
+  }
+
   Future<bool> disposeMedia(Media media) async {
     throw UnimplementedError('disposeMedia() has not been implemented.');
   }

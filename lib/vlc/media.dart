@@ -38,6 +38,25 @@ class VideoTrack {
   final int projection;
 }
 
+class AudioTrack {
+  final int channels;
+  final int rate;
+  final String description;
+
+  AudioTrack({
+    required this.channels,
+    required this.rate,
+    required this.description,
+  });
+}
+
+class SubtitleTrack {
+  final String encoding;
+  final String description;
+
+  SubtitleTrack({required this.encoding, required this.description});
+}
+
 class Media {
   static final _medias = <int, Media>{};
 
@@ -69,9 +88,7 @@ class Media {
   final int mediaId;
   final _parsedCompleter = Completer<bool>();
 
-  void setEventListener() {
-
-  }
+  void setEventListener() {}
 
   Future<bool> parseAsync() async {
     await VlcPlayerPlatform.instance.mediaParseAsync(this);
@@ -91,6 +108,27 @@ class Media {
       orientation: track.orientation ?? 0,
       projection: track.projection ?? 0,
     );
+  }
+
+  Future<List<AudioTrack>> getAudioTrack() async {
+    final tracks = await VlcPlayerPlatform.instance.mediaGetAudioTrack(this);
+    return tracks.map((track) {
+      return AudioTrack(
+        channels: track.channels ?? 0,
+        rate: track.rate ?? 1,
+        description: track.description ?? '',
+      );
+    }).toList();
+  }
+
+  Future<List<SubtitleTrack>> getSubtitleTrack() async {
+    final tracks = await VlcPlayerPlatform.instance.mediaGetSubtitleTrack(this);
+    return tracks.map((track) {
+      return SubtitleTrack(
+        encoding: track.encoding ?? '',
+        description: track.description ?? '',
+      );
+    }).toList();
   }
 
   void _onMediaEvent(int eventIndex) {

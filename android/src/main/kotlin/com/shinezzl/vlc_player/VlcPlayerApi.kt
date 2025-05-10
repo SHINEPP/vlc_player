@@ -1,6 +1,8 @@
 package com.shinezzl.vlc_player
 
+import MediaAudioTrack
 import MediaCreateInput
+import MediaSubtitleTrack
 import MediaVideoTrack
 import VideoViewCreateResult
 import VlcApi
@@ -16,6 +18,8 @@ import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
 import org.videolan.libvlc.MediaPlayer
 import org.videolan.libvlc.interfaces.IMedia
+import org.videolan.libvlc.interfaces.IMedia.AudioTrack
+import org.videolan.libvlc.interfaces.IMedia.SubtitleTrack
 import org.videolan.libvlc.interfaces.IMedia.VideoTrack
 
 class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : VlcApi {
@@ -147,6 +151,7 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     }
 
     override fun mediaGetVideoTrack(mediaId: Long, callback: (Result<MediaVideoTrack>) -> Unit) {
+        Log.d(TAG, "mediaGetVideoTrack()")
         val media = objectHelper.getObject<Media>(mediaId)
         val tracks = media?.tracks ?: emptyArray()
         val videoTrack = tracks.firstOrNull { it is VideoTrack } as VideoTrack?
@@ -161,6 +166,28 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
             orientation = videoTrack?.orientation?.toLong(),
             projection = videoTrack?.projection?.toLong(),
         )
+        callback.invoke(Result.success(result))
+    }
+
+    override fun mediaGetAudioTrack(mediaId: Long, callback: (Result<List<MediaAudioTrack>>) -> Unit) {
+        Log.d(TAG, "mediaGetAudioTrack()")
+        val media = objectHelper.getObject<Media>(mediaId)
+        val tracks = media?.tracks ?: emptyArray()
+        val audioTracks = tracks.filterIsInstance<AudioTrack>()
+        val result = audioTracks.map {
+            MediaAudioTrack(trackId = it.id.toLong(), channels = it.channels.toLong(), rate = it.rate.toLong(), description = it.description)
+        }
+        callback.invoke(Result.success(result))
+    }
+
+    override fun mediaGetSubtitleTrack(mediaId: Long, callback: (Result<List<MediaSubtitleTrack>>) -> Unit) {
+        Log.d(TAG, "mediaGetSubtitleTrack()")
+        val media = objectHelper.getObject<Media>(mediaId)
+        val tracks = media?.tracks ?: emptyArray()
+        val subtitleTracks = tracks.filterIsInstance<SubtitleTrack>()
+        val result = subtitleTracks.map {
+            MediaSubtitleTrack(trackId = it.id.toLong(), encoding = it.encoding, description = it.description)
+        }
         callback.invoke(Result.success(result))
     }
 

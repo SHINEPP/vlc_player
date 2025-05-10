@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'message/messages.g.dart';
-import 'message/vlc_flutter_api.dart';
+import 'message/messages_flutter_api.dart';
 import 'vlc/data_source.dart';
 import 'vlc/hw_acc.dart';
 import 'vlc/lib_vlc.dart';
@@ -17,7 +17,7 @@ import 'vlc_player_platform_interface.dart';
 /// An implementation of [VlcPlayerPlatform] that uses method channels.
 class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   final _api = VlcApi();
-  final _flutterApi = VlcPlayerFlutterApi();
+  final _flutterApi = MessagesFlutterApi();
 
   MethodChannelVlcPlayer() {
     VlcFlutterApi.setUp(_flutterApi);
@@ -69,6 +69,16 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   @override
   Future<MediaVideoTrack> mediaGetVideoTrack(Media media) async {
     return await _api.mediaGetVideoTrack(media.mediaId);
+  }
+
+  @override
+  Future<List<MediaAudioTrack>> mediaGetAudioTrack(Media media) async {
+    return await _api.mediaGetAudioTrack(media.mediaId);
+  }
+
+  @override
+  Future<List<MediaSubtitleTrack>> mediaGetSubtitleTrack(Media media) async {
+    return await _api.mediaGetSubtitleTrack(media.mediaId);
   }
 
   @override

@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class VLC_PLAYERMediaCreateInput;
 @class VLC_PLAYERMediaVideoTrack;
+@class VLC_PLAYERMediaAudioTrack;
+@class VLC_PLAYERMediaSubtitleTrack;
 @class VLC_PLAYERVideoViewCreateResult;
 
 @interface VLC_PLAYERMediaCreateInput : NSObject
@@ -50,6 +52,26 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSNumber * projection;
 @end
 
+@interface VLC_PLAYERMediaAudioTrack : NSObject
++ (instancetype)makeWithTrackId:(nullable NSNumber *)trackId
+    channels:(nullable NSNumber *)channels
+    rate:(nullable NSNumber *)rate
+    description:(nullable NSString *)description;
+@property(nonatomic, strong, nullable) NSNumber * trackId;
+@property(nonatomic, strong, nullable) NSNumber * channels;
+@property(nonatomic, strong, nullable) NSNumber * rate;
+@property(nonatomic, copy, nullable) NSString * description;
+@end
+
+@interface VLC_PLAYERMediaSubtitleTrack : NSObject
++ (instancetype)makeWithTrackId:(nullable NSNumber *)trackId
+    encoding:(nullable NSString *)encoding
+    description:(nullable NSString *)description;
+@property(nonatomic, strong, nullable) NSNumber * trackId;
+@property(nonatomic, copy, nullable) NSString * encoding;
+@property(nonatomic, copy, nullable) NSString * description;
+@end
+
 @interface VLC_PLAYERVideoViewCreateResult : NSObject
 + (instancetype)makeWithObjectId:(nullable NSNumber *)objectId
     textureId:(nullable NSNumber *)textureId;
@@ -69,6 +91,8 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 - (void)setMediaEventListenerMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaParseAsyncMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaGetVideoTrackMediaId:(NSInteger)mediaId completion:(void (^)(VLC_PLAYERMediaVideoTrack *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaGetAudioTrackMediaId:(NSInteger)mediaId completion:(void (^)(NSArray<VLC_PLAYERMediaAudioTrack *> *_Nullable, FlutterError *_Nullable))completion;
+- (void)mediaGetSubtitleTrackMediaId:(NSInteger)mediaId completion:(void (^)(NSArray<VLC_PLAYERMediaSubtitleTrack *> *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// MediaPlayer
 - (void)createMediaPlayerLibVlcId:(NSInteger)libVlcId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;

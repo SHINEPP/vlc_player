@@ -43,6 +43,18 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 - (NSArray<id> *)toList;
 @end
 
+@interface VLC_PLAYERMediaAudioTrack ()
++ (VLC_PLAYERMediaAudioTrack *)fromList:(NSArray<id> *)list;
++ (nullable VLC_PLAYERMediaAudioTrack *)nullableFromList:(NSArray<id> *)list;
+- (NSArray<id> *)toList;
+@end
+
+@interface VLC_PLAYERMediaSubtitleTrack ()
++ (VLC_PLAYERMediaSubtitleTrack *)fromList:(NSArray<id> *)list;
++ (nullable VLC_PLAYERMediaSubtitleTrack *)nullableFromList:(NSArray<id> *)list;
+- (NSArray<id> *)toList;
+@end
+
 @interface VLC_PLAYERVideoViewCreateResult ()
 + (VLC_PLAYERVideoViewCreateResult *)fromList:(NSArray<id> *)list;
 + (nullable VLC_PLAYERVideoViewCreateResult *)nullableFromList:(NSArray<id> *)list;
@@ -143,6 +155,68 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 }
 @end
 
+@implementation VLC_PLAYERMediaAudioTrack
++ (instancetype)makeWithTrackId:(nullable NSNumber *)trackId
+    channels:(nullable NSNumber *)channels
+    rate:(nullable NSNumber *)rate
+    description:(nullable NSString *)description {
+  VLC_PLAYERMediaAudioTrack* pigeonResult = [[VLC_PLAYERMediaAudioTrack alloc] init];
+  pigeonResult.trackId = trackId;
+  pigeonResult.channels = channels;
+  pigeonResult.rate = rate;
+  pigeonResult.description = description;
+  return pigeonResult;
+}
++ (VLC_PLAYERMediaAudioTrack *)fromList:(NSArray<id> *)list {
+  VLC_PLAYERMediaAudioTrack *pigeonResult = [[VLC_PLAYERMediaAudioTrack alloc] init];
+  pigeonResult.trackId = GetNullableObjectAtIndex(list, 0);
+  pigeonResult.channels = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.rate = GetNullableObjectAtIndex(list, 2);
+  pigeonResult.description = GetNullableObjectAtIndex(list, 3);
+  return pigeonResult;
+}
++ (nullable VLC_PLAYERMediaAudioTrack *)nullableFromList:(NSArray<id> *)list {
+  return (list) ? [VLC_PLAYERMediaAudioTrack fromList:list] : nil;
+}
+- (NSArray<id> *)toList {
+  return @[
+    self.trackId ?: [NSNull null],
+    self.channels ?: [NSNull null],
+    self.rate ?: [NSNull null],
+    self.description ?: [NSNull null],
+  ];
+}
+@end
+
+@implementation VLC_PLAYERMediaSubtitleTrack
++ (instancetype)makeWithTrackId:(nullable NSNumber *)trackId
+    encoding:(nullable NSString *)encoding
+    description:(nullable NSString *)description {
+  VLC_PLAYERMediaSubtitleTrack* pigeonResult = [[VLC_PLAYERMediaSubtitleTrack alloc] init];
+  pigeonResult.trackId = trackId;
+  pigeonResult.encoding = encoding;
+  pigeonResult.description = description;
+  return pigeonResult;
+}
++ (VLC_PLAYERMediaSubtitleTrack *)fromList:(NSArray<id> *)list {
+  VLC_PLAYERMediaSubtitleTrack *pigeonResult = [[VLC_PLAYERMediaSubtitleTrack alloc] init];
+  pigeonResult.trackId = GetNullableObjectAtIndex(list, 0);
+  pigeonResult.encoding = GetNullableObjectAtIndex(list, 1);
+  pigeonResult.description = GetNullableObjectAtIndex(list, 2);
+  return pigeonResult;
+}
++ (nullable VLC_PLAYERMediaSubtitleTrack *)nullableFromList:(NSArray<id> *)list {
+  return (list) ? [VLC_PLAYERMediaSubtitleTrack fromList:list] : nil;
+}
+- (NSArray<id> *)toList {
+  return @[
+    self.trackId ?: [NSNull null],
+    self.encoding ?: [NSNull null],
+    self.description ?: [NSNull null],
+  ];
+}
+@end
+
 @implementation VLC_PLAYERVideoViewCreateResult
 + (instancetype)makeWithObjectId:(nullable NSNumber *)objectId
     textureId:(nullable NSNumber *)textureId {
@@ -178,6 +252,10 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
     case 130: 
       return [VLC_PLAYERMediaVideoTrack fromList:[self readValue]];
     case 131: 
+      return [VLC_PLAYERMediaAudioTrack fromList:[self readValue]];
+    case 132: 
+      return [VLC_PLAYERMediaSubtitleTrack fromList:[self readValue]];
+    case 133: 
       return [VLC_PLAYERVideoViewCreateResult fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -195,8 +273,14 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   } else if ([value isKindOfClass:[VLC_PLAYERMediaVideoTrack class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERVideoViewCreateResult class]]) {
+  } else if ([value isKindOfClass:[VLC_PLAYERMediaAudioTrack class]]) {
     [self writeByte:131];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[VLC_PLAYERMediaSubtitleTrack class]]) {
+    [self writeByte:132];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[VLC_PLAYERVideoViewCreateResult class]]) {
+    [self writeByte:133];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -339,6 +423,44 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
         NSArray<id> *args = message;
         NSInteger arg_mediaId = [GetNullableObjectAtIndex(args, 0) integerValue];
         [api mediaGetVideoTrackMediaId:arg_mediaId completion:^(VLC_PLAYERMediaVideoTrack *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetAudioTrack", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(mediaGetAudioTrackMediaId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(mediaGetAudioTrackMediaId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        [api mediaGetAudioTrackMediaId:arg_mediaId completion:^(NSArray<VLC_PLAYERMediaAudioTrack *> *_Nullable output, FlutterError *_Nullable error) {
+          callback(wrapResult(output, error));
+        }];
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:[NSString stringWithFormat:@"%@%@", @"dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetSubtitleTrack", messageChannelSuffix]
+        binaryMessenger:binaryMessenger
+        codec:VLC_PLAYERGetMessagesCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(mediaGetSubtitleTrackMediaId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(mediaGetSubtitleTrackMediaId:completion:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray<id> *args = message;
+        NSInteger arg_mediaId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        [api mediaGetSubtitleTrackMediaId:arg_mediaId completion:^(NSArray<VLC_PLAYERMediaSubtitleTrack *> *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
