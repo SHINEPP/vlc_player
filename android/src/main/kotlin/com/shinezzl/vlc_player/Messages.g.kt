@@ -314,6 +314,37 @@ data class MediaPlayerOutput (
 
   override fun hashCode(): Int = toList().hashCode()
 }
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class VideoViewOutput (
+  val objectId: Long? = null,
+  val textureId: Long? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): VideoViewOutput {
+      val objectId = pigeonVar_list[0] as Long?
+      val textureId = pigeonVar_list[1] as Long?
+      return VideoViewOutput(objectId, textureId)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      objectId,
+      textureId,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other !is VideoViewOutput) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
+
+  override fun hashCode(): Int = toList().hashCode()
+}
 private open class MessagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -352,6 +383,11 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
           MediaPlayerOutput.fromList(it)
         }
       }
+      136.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          VideoViewOutput.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -385,6 +421,10 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
         stream.write(135)
         writeValue(stream, value.toList())
       }
+      is VideoViewOutput -> {
+        stream.write(136)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
@@ -405,6 +445,9 @@ interface VlcApi {
   /** MediaPlayer */
   fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit)
   fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit)
+  /** Video View */
+  fun createVideoView(callback: (Result<VideoViewOutput>) -> Unit)
+  fun disposeVideoView(videoViewId: Long, callback: (Result<Boolean>) -> Unit)
 
   companion object {
     /** The codec used by VlcApi. */
@@ -582,6 +625,44 @@ interface VlcApi {
             val args = message as List<Any?>
             val mediaPlayerIdArg = args[0] as Long
             api.disposeMediaPlayer(mediaPlayerIdArg) { result: Result<Boolean> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createVideoView$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.createVideoView{ result: Result<VideoViewOutput> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeVideoView$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val videoViewIdArg = args[0] as Long
+            api.disposeVideoView(videoViewIdArg) { result: Result<Boolean> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

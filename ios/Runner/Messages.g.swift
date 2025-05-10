@@ -359,6 +359,35 @@ struct MediaPlayerOutput: Hashable {
   }
 }
 
+/// Generated class from Pigeon that represents data sent in messages.
+struct VideoViewOutput: Hashable {
+  var objectId: Int64? = nil
+  var textureId: Int64? = nil
+
+
+  // swift-format-ignore: AlwaysUseLowerCamelCase
+  static func fromList(_ pigeonVar_list: [Any?]) -> VideoViewOutput? {
+    let objectId: Int64? = nilOrValue(pigeonVar_list[0])
+    let textureId: Int64? = nilOrValue(pigeonVar_list[1])
+
+    return VideoViewOutput(
+      objectId: objectId,
+      textureId: textureId
+    )
+  }
+  func toList() -> [Any?] {
+    return [
+      objectId,
+      textureId,
+    ]
+  }
+  static func == (lhs: VideoViewOutput, rhs: VideoViewOutput) -> Bool {
+    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
+  func hash(into hasher: inout Hasher) {
+    deepHashMessages(value: toList(), hasher: &hasher)
+  }
+}
+
 private class MessagesPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
@@ -376,6 +405,8 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
       return MediaPlayerInput.fromList(self.readValue() as! [Any?])
     case 135:
       return MediaPlayerOutput.fromList(self.readValue() as! [Any?])
+    case 136:
+      return VideoViewOutput.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -404,6 +435,9 @@ private class MessagesPigeonCodecWriter: FlutterStandardWriter {
       super.writeValue(value.toList())
     } else if let value = value as? MediaPlayerOutput {
       super.writeByte(135)
+      super.writeValue(value.toList())
+    } else if let value = value as? VideoViewOutput {
+      super.writeByte(136)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -440,6 +474,9 @@ protocol VlcApi {
   /// MediaPlayer
   func createMediaPlayer(input: MediaPlayerInput, completion: @escaping (Result<MediaPlayerOutput, Error>) -> Void)
   func disposeMediaPlayer(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
+  /// Video View
+  func createVideoView(completion: @escaping (Result<VideoViewOutput, Error>) -> Void)
+  func disposeVideoView(videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -603,6 +640,39 @@ class VlcApiSetup {
       }
     } else {
       disposeMediaPlayerChannel.setMessageHandler(nil)
+    }
+    /// Video View
+    let createVideoViewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createVideoView\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      createVideoViewChannel.setMessageHandler { _, reply in
+        api.createVideoView { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      createVideoViewChannel.setMessageHandler(nil)
+    }
+    let disposeVideoViewChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeVideoView\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      disposeVideoViewChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let videoViewIdArg = args[0] as! Int64
+        api.disposeVideoView(videoViewId: videoViewIdArg) { result in
+          switch result {
+          case .success(let res):
+            reply(wrapResult(res))
+          case .failure(let error):
+            reply(wrapError(error))
+          }
+        }
+      }
+    } else {
+      disposeVideoViewChannel.setMessageHandler(nil)
     }
   }
 }

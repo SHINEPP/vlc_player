@@ -63,13 +63,14 @@ class Media {
 
   Media({required this.mediaId}) {
     _medias[mediaId] = this;
+    VlcPlayerPlatform.instance.setMediaEventListener(this);
   }
 
   final int mediaId;
   final _parsedCompleter = Completer<bool>();
 
   void setEventListener() {
-    VlcPlayerPlatform.instance.setMediaEventListener(this);
+
   }
 
   Future<bool> parseAsync() async {

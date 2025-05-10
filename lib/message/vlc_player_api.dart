@@ -59,6 +59,12 @@ class MediaPlayerOutput {
   int? mediaPlayerId;
 }
 
+// Video View
+class VideoViewOutput {
+  int? objectId;
+  int? textureId;
+}
+
 @HostApi()
 abstract class VlcApi {
   /// LibVLC
@@ -90,6 +96,13 @@ abstract class VlcApi {
 
   @async
   bool disposeMediaPlayer(int mediaPlayerId);
+
+  /// Video View
+  @async
+  VideoViewOutput createVideoView();
+
+  @async
+  bool disposeVideoView(int videoViewId);
 }
 
 @FlutterApi()

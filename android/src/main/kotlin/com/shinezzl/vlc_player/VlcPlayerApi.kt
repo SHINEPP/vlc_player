@@ -7,6 +7,7 @@ import MediaOutput
 import MediaPlayerInput
 import MediaPlayerOutput
 import MediaVideoTrack
+import VideoViewOutput
 import VlcApi
 import VlcFlutterApi
 import android.util.Log
@@ -14,6 +15,7 @@ import androidx.core.net.toUri
 import com.shinezzl.vlc_player.vlc.DataSourceType
 import com.shinezzl.vlc_player.vlc.HwAcc
 import com.shinezzl.vlc_player.vlc.MediaEvent
+import com.shinezzl.vlc_player.vlc.VideoView
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import org.videolan.libvlc.LibVLC
 import org.videolan.libvlc.Media
@@ -190,6 +192,21 @@ class VlcPlayerApi(private val binding: FlutterPlugin.FlutterPluginBinding) : Vl
     override fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit) {
         Log.d(TAG, "disposeMediaPlayer()")
         objectHelper.removeObject<MediaPlayer>(mediaPlayerId)?.release()
+        callback.invoke(Result.success(true))
+    }
+
+    // Video View
+    override fun createVideoView(callback: (Result<VideoViewOutput>) -> Unit) {
+        Log.d(TAG, "createVideoView()")
+        val texture = binding.textureRegistry.createSurfaceTexture()
+        val videoView = VideoView(texture)
+        val videoViewId = objectHelper.putObject(videoView)
+        callback.invoke(Result.success(VideoViewOutput(objectId = videoViewId, textureId = texture.id())))
+    }
+
+    override fun disposeVideoView(videoViewId: Long, callback: (Result<Boolean>) -> Unit) {
+        Log.d(TAG, "disposeVideoView()")
+        objectHelper.removeObject<VideoView>(videoViewId)?.release()
         callback.invoke(Result.success(true))
     }
 }

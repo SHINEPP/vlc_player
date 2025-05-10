@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:vlc_player/vlc/data_source.dart';
 import 'package:vlc_player/vlc/lib_vlc.dart';
 import 'package:vlc_player/vlc/media.dart';
 import 'package:vlc_player/vlc/media_player.dart';
+import 'package:vlc_player/vlc/video_view.dart';
 
 import 'hw_acc.dart';
 
@@ -32,8 +34,13 @@ class VlcPlayerController {
   /// Only set for [asset] videos. The package that the asset was loaded from.
   String? packageName;
 
-  /// The viewId for this controller
-  int _viewId = -1;
+  /// Video Play
+  late LibVlc _libVlc;
+  late MediaPlayer _mediaPlayer;
+  late Media _media;
+  late VideoView _videoView;
+
+  final _initCompleter = Completer<bool>();
 
   VlcPlayerController({
     required this.dataSource,
@@ -70,7 +77,7 @@ class VlcPlayerController {
     bool autoPlay = true,
     List<String>? options,
   }) => VlcPlayerController(
-    dataSource: DataSource(type: DataSourceType.asset, value: url),
+    dataSource: DataSource(type: DataSourceType.network, value: url),
     allowBackgroundPlayback: allowBackgroundPlayback,
     packageName: packageName,
     hwAcc: hwAcc,
@@ -98,27 +105,24 @@ class VlcPlayerController {
   );
 
   Future<void> _init() async {
-    final libVlc = await LibVlc.create();
-    final media = await Media.create(libVlc: libVlc, dataSource: dataSource);
-    media.setEventListener();
-    await media.parseAsync();
-    final videoTrack = await media.getVideoTrack();
-    debugPrint("VideoTrack, duration = ${videoTrack.duration}");
-    debugPrint("VideoTrack, width = ${videoTrack.width}");
-    debugPrint("VideoTrack, height = ${videoTrack.height}");
-    debugPrint("VideoTrack, sarDen = ${videoTrack.sarDen}");
-    debugPrint("VideoTrack, sarNum = ${videoTrack.sarNum}");
-    debugPrint("VideoTrack, frameRateDen = ${videoTrack.frameRateDen}");
-    debugPrint("VideoTrack, frameRateNum = ${videoTrack.frameRateNum}");
-    debugPrint("VideoTrack, orientation = ${videoTrack.orientation}");
-    debugPrint("VideoTrack, projection = ${videoTrack.projection}");
-
-    final mediaPlayer = await MediaPlayer.create(libVlc);
-
-    //await mediaPlayer.dispose();
-    //await media.dispose();
-    //await libVlc.dispose();
+    _libVlc = await LibVlc.create();
+    _mediaPlayer = await MediaPlayer.create(_libVlc);
+    _media = await Media.create(libVlc: _libVlc, dataSource: dataSource);
+    _videoView = await VideoView.create();
+    await _media.parseAsync();
+    _initCompleter.complete(true);
   }
 
-  Future<void> dispose() async {}
+  Future<bool> prepared() async => _initCompleter.future;
+
+  bool isPrepared() => _initCompleter.isCompleted;
+
+  Widget buildView() => _videoView.buildView();
+
+  Future<void> dispose() async {
+    await _mediaPlayer.dispose();
+    await _media.dispose();
+    await _libVlc.dispose();
+    await _videoView.dispose();
+  }
 }

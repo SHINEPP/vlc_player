@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class VLC_PLAYERMediaVideoTrack;
 @class VLC_PLAYERMediaPlayerInput;
 @class VLC_PLAYERMediaPlayerOutput;
+@class VLC_PLAYERVideoViewOutput;
 
 @interface VLC_PLAYERLibVlcInput : NSObject
 + (instancetype)makeWithOptions:(nullable NSArray<NSString *> *)options;
@@ -79,6 +80,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSNumber * mediaPlayerId;
 @end
 
+@interface VLC_PLAYERVideoViewOutput : NSObject
++ (instancetype)makeWithObjectId:(nullable NSNumber *)objectId
+    textureId:(nullable NSNumber *)textureId;
+@property(nonatomic, strong, nullable) NSNumber * objectId;
+@property(nonatomic, strong, nullable) NSNumber * textureId;
+@end
+
 /// The codec used by all APIs.
 NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 
@@ -95,6 +103,9 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 /// MediaPlayer
 - (void)createMediaPlayerInput:(VLC_PLAYERMediaPlayerInput *)input completion:(void (^)(VLC_PLAYERMediaPlayerOutput *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaPlayerMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+/// Video View
+- (void)createVideoViewWithCompletion:(void (^)(VLC_PLAYERVideoViewOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)disposeVideoViewVideoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 @end
 
 extern void SetUpVLC_PLAYERVlcApi(id<FlutterBinaryMessenger> binaryMessenger, NSObject<VLC_PLAYERVlcApi> *_Nullable api);

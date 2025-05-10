@@ -1,3 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+
 import 'message/messages.g.dart';
 import 'message/vlc_player_flutter_api.dart';
 import 'vlc/data_source.dart';
@@ -5,6 +11,7 @@ import 'vlc/hw_acc.dart';
 import 'vlc/lib_vlc.dart';
 import 'vlc/media.dart';
 import 'vlc/media_player.dart';
+import 'vlc/video_view.dart';
 import 'vlc_player_platform_interface.dart';
 
 /// An implementation of [VlcPlayerPlatform] that uses method channels.
@@ -82,5 +89,38 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   @override
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     return await _api.disposeMediaPlayer(mediaPlayer.mediaPlayerId);
+  }
+
+  /// Video View
+  @override
+  Future<VideoViewOutput> createVideoView() async {
+    return await _api.createVideoView();
+  }
+
+  @override
+  Future<bool> disposeVideoView(VideoView videoView) async {
+    return await _api.disposeVideoView(videoView.videoViewId);
+  }
+
+  @override
+  Widget buildVideoView(VideoView videoView) {
+    if (Platform.isAndroid) {
+      return Texture(textureId: videoView.textureId);
+    } else if (Platform.isIOS) {
+      return UiKitView(
+        viewType: 'vlc_player_plugin/buildVideoView',
+        hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+        creationParamsCodec: const StandardMessageCodec(),
+        creationParams: {'videoViewId': videoView.videoViewId},
+      );
+    } else if (Platform.isMacOS) {
+      return AppKitView(
+        viewType: 'vlc_player_plugin/buildVideoView',
+        hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+        creationParamsCodec: const StandardMessageCodec(),
+        creationParams: {'videoViewId': videoView.videoViewId},
+      );
+    }
+    return Container();
   }
 }

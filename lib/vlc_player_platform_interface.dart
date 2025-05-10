@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:vlc_player/vlc/video_view.dart';
 
 import 'message/messages.g.dart';
 import 'vlc/data_source.dart';
@@ -74,5 +76,18 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
 
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
     throw UnimplementedError('disposeMediaPlayer() has not been implemented.');
+  }
+
+  /// Video View
+  Future<VideoViewOutput> createVideoView() async {
+    throw UnimplementedError('createVideoView() has not been implemented.');
+  }
+
+  Future<bool> disposeVideoView(VideoView videoView) async {
+    throw UnimplementedError('disposeVideoView() has not been implemented.');
+  }
+
+  Widget buildVideoView(VideoView videoView) {
+    throw UnimplementedError('buildVideoView() has not been implemented.');
   }
 }
