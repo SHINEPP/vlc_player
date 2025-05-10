@@ -133,57 +133,7 @@ func deepHashMessages(value: Any?, hasher: inout Hasher) {
     
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct LibVlcInput: Hashable {
-  var options: [String]? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> LibVlcInput? {
-    let options: [String]? = nilOrValue(pigeonVar_list[0])
-
-    return LibVlcInput(
-      options: options
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      options
-    ]
-  }
-  static func == (lhs: LibVlcInput, rhs: LibVlcInput) -> Bool {
-    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashMessages(value: toList(), hasher: &hasher)
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct LibVlcOutput: Hashable {
-  var libVlcId: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> LibVlcOutput? {
-    let libVlcId: Int64? = nilOrValue(pigeonVar_list[0])
-
-    return LibVlcOutput(
-      libVlcId: libVlcId
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      libVlcId
-    ]
-  }
-  static func == (lhs: LibVlcOutput, rhs: LibVlcOutput) -> Bool {
-    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashMessages(value: toList(), hasher: &hasher)
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MediaInput: Hashable {
+struct MediaCreateInput: Hashable {
   var libVlcId: Int64? = nil
   var dataSourceType: Int64? = nil
   var dataSourceValue: String? = nil
@@ -193,7 +143,7 @@ struct MediaInput: Hashable {
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MediaInput? {
+  static func fromList(_ pigeonVar_list: [Any?]) -> MediaCreateInput? {
     let libVlcId: Int64? = nilOrValue(pigeonVar_list[0])
     let dataSourceType: Int64? = nilOrValue(pigeonVar_list[1])
     let dataSourceValue: String? = nilOrValue(pigeonVar_list[2])
@@ -201,7 +151,7 @@ struct MediaInput: Hashable {
     let hwAcc: Int64? = nilOrValue(pigeonVar_list[4])
     let options: [String]? = nilOrValue(pigeonVar_list[5])
 
-    return MediaInput(
+    return MediaCreateInput(
       libVlcId: libVlcId,
       dataSourceType: dataSourceType,
       dataSourceValue: dataSourceValue,
@@ -220,32 +170,7 @@ struct MediaInput: Hashable {
       options,
     ]
   }
-  static func == (lhs: MediaInput, rhs: MediaInput) -> Bool {
-    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashMessages(value: toList(), hasher: &hasher)
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MediaOutput: Hashable {
-  var mediaId: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MediaOutput? {
-    let mediaId: Int64? = nilOrValue(pigeonVar_list[0])
-
-    return MediaOutput(
-      mediaId: mediaId
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      mediaId
-    ]
-  }
-  static func == (lhs: MediaOutput, rhs: MediaOutput) -> Bool {
+  static func == (lhs: MediaCreateInput, rhs: MediaCreateInput) -> Bool {
     return deepEqualsMessages(lhs.toList(), rhs.toList())  }
   func hash(into hasher: inout Hasher) {
     deepHashMessages(value: toList(), hasher: &hasher)
@@ -310,67 +235,17 @@ struct MediaVideoTrack: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct MediaPlayerInput: Hashable {
-  var libVlcId: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MediaPlayerInput? {
-    let libVlcId: Int64? = nilOrValue(pigeonVar_list[0])
-
-    return MediaPlayerInput(
-      libVlcId: libVlcId
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      libVlcId
-    ]
-  }
-  static func == (lhs: MediaPlayerInput, rhs: MediaPlayerInput) -> Bool {
-    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashMessages(value: toList(), hasher: &hasher)
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct MediaPlayerOutput: Hashable {
-  var mediaPlayerId: Int64? = nil
-
-
-  // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> MediaPlayerOutput? {
-    let mediaPlayerId: Int64? = nilOrValue(pigeonVar_list[0])
-
-    return MediaPlayerOutput(
-      mediaPlayerId: mediaPlayerId
-    )
-  }
-  func toList() -> [Any?] {
-    return [
-      mediaPlayerId
-    ]
-  }
-  static func == (lhs: MediaPlayerOutput, rhs: MediaPlayerOutput) -> Bool {
-    return deepEqualsMessages(lhs.toList(), rhs.toList())  }
-  func hash(into hasher: inout Hasher) {
-    deepHashMessages(value: toList(), hasher: &hasher)
-  }
-}
-
-/// Generated class from Pigeon that represents data sent in messages.
-struct VideoViewOutput: Hashable {
+struct VideoViewCreateResult: Hashable {
   var objectId: Int64? = nil
   var textureId: Int64? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> VideoViewOutput? {
+  static func fromList(_ pigeonVar_list: [Any?]) -> VideoViewCreateResult? {
     let objectId: Int64? = nilOrValue(pigeonVar_list[0])
     let textureId: Int64? = nilOrValue(pigeonVar_list[1])
 
-    return VideoViewOutput(
+    return VideoViewCreateResult(
       objectId: objectId,
       textureId: textureId
     )
@@ -381,7 +256,7 @@ struct VideoViewOutput: Hashable {
       textureId,
     ]
   }
-  static func == (lhs: VideoViewOutput, rhs: VideoViewOutput) -> Bool {
+  static func == (lhs: VideoViewCreateResult, rhs: VideoViewCreateResult) -> Bool {
     return deepEqualsMessages(lhs.toList(), rhs.toList())  }
   func hash(into hasher: inout Hasher) {
     deepHashMessages(value: toList(), hasher: &hasher)
@@ -392,21 +267,11 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
-      return LibVlcInput.fromList(self.readValue() as! [Any?])
+      return MediaCreateInput.fromList(self.readValue() as! [Any?])
     case 130:
-      return LibVlcOutput.fromList(self.readValue() as! [Any?])
-    case 131:
-      return MediaInput.fromList(self.readValue() as! [Any?])
-    case 132:
-      return MediaOutput.fromList(self.readValue() as! [Any?])
-    case 133:
       return MediaVideoTrack.fromList(self.readValue() as! [Any?])
-    case 134:
-      return MediaPlayerInput.fromList(self.readValue() as! [Any?])
-    case 135:
-      return MediaPlayerOutput.fromList(self.readValue() as! [Any?])
-    case 136:
-      return VideoViewOutput.fromList(self.readValue() as! [Any?])
+    case 131:
+      return VideoViewCreateResult.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -415,29 +280,14 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
 
 private class MessagesPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? LibVlcInput {
+    if let value = value as? MediaCreateInput {
       super.writeByte(129)
       super.writeValue(value.toList())
-    } else if let value = value as? LibVlcOutput {
+    } else if let value = value as? MediaVideoTrack {
       super.writeByte(130)
       super.writeValue(value.toList())
-    } else if let value = value as? MediaInput {
+    } else if let value = value as? VideoViewCreateResult {
       super.writeByte(131)
-      super.writeValue(value.toList())
-    } else if let value = value as? MediaOutput {
-      super.writeByte(132)
-      super.writeValue(value.toList())
-    } else if let value = value as? MediaVideoTrack {
-      super.writeByte(133)
-      super.writeValue(value.toList())
-    } else if let value = value as? MediaPlayerInput {
-      super.writeByte(134)
-      super.writeValue(value.toList())
-    } else if let value = value as? MediaPlayerOutput {
-      super.writeByte(135)
-      super.writeValue(value.toList())
-    } else if let value = value as? VideoViewOutput {
-      super.writeByte(136)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -463,16 +313,16 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol VlcApi {
   /// LibVLC
-  func createLibVlc(input: LibVlcInput, completion: @escaping (Result<LibVlcOutput, Error>) -> Void)
+  func createLibVlc(options: [String]?, completion: @escaping (Result<Int64, Error>) -> Void)
   func disposeLibVlc(libVlcId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Media
-  func createMedia(input: MediaInput, completion: @escaping (Result<MediaOutput, Error>) -> Void)
+  func createMedia(input: MediaCreateInput, completion: @escaping (Result<Int64, Error>) -> Void)
   func setMediaEventListener(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaParseAsync(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaGetVideoTrack(mediaId: Int64, completion: @escaping (Result<MediaVideoTrack, Error>) -> Void)
   func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// MediaPlayer
-  func createMediaPlayer(input: MediaPlayerInput, completion: @escaping (Result<MediaPlayerOutput, Error>) -> Void)
+  func createMediaPlayer(libVlcId: Int64, completion: @escaping (Result<Int64, Error>) -> Void)
   func mediaPlayerSetMedia(mediaPlayerId: Int64, mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaPlayerAttachVideoView(mediaPlayerId: Int64, videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func mediaPlayerPlay(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
@@ -490,7 +340,7 @@ protocol VlcApi {
   func mediaPlayerGetRate(mediaPlayerId: Int64, completion: @escaping (Result<Double, Error>) -> Void)
   func disposeMediaPlayer(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   /// Video View
-  func createVideoView(completion: @escaping (Result<VideoViewOutput, Error>) -> Void)
+  func createVideoView(completion: @escaping (Result<VideoViewCreateResult, Error>) -> Void)
   func videoViewSetDefaultBufferSize(videoViewId: Int64, width: Int64, height: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
   func disposeVideoView(videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void)
 }
@@ -506,8 +356,8 @@ class VlcApiSetup {
     if let api = api {
       createLibVlcChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let inputArg = args[0] as! LibVlcInput
-        api.createLibVlc(input: inputArg) { result in
+        let optionsArg: [String]? = nilOrValue(args[0])
+        api.createLibVlc(options: optionsArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))
@@ -541,7 +391,7 @@ class VlcApiSetup {
     if let api = api {
       createMediaChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let inputArg = args[0] as! MediaInput
+        let inputArg = args[0] as! MediaCreateInput
         api.createMedia(input: inputArg) { result in
           switch result {
           case .success(let res):
@@ -627,8 +477,8 @@ class VlcApiSetup {
     if let api = api {
       createMediaPlayerChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let inputArg = args[0] as! MediaPlayerInput
-        api.createMediaPlayer(input: inputArg) { result in
+        let libVlcIdArg = args[0] as! Int64
+        api.createMediaPlayer(libVlcId: libVlcIdArg) { result in
           switch result {
           case .success(let res):
             reply(wrapResult(res))

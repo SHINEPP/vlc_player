@@ -31,27 +31,9 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   return (result == [NSNull null]) ? nil : result;
 }
 
-@interface VLC_PLAYERLibVlcInput ()
-+ (VLC_PLAYERLibVlcInput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERLibVlcInput *)nullableFromList:(NSArray<id> *)list;
-- (NSArray<id> *)toList;
-@end
-
-@interface VLC_PLAYERLibVlcOutput ()
-+ (VLC_PLAYERLibVlcOutput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERLibVlcOutput *)nullableFromList:(NSArray<id> *)list;
-- (NSArray<id> *)toList;
-@end
-
-@interface VLC_PLAYERMediaInput ()
-+ (VLC_PLAYERMediaInput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERMediaInput *)nullableFromList:(NSArray<id> *)list;
-- (NSArray<id> *)toList;
-@end
-
-@interface VLC_PLAYERMediaOutput ()
-+ (VLC_PLAYERMediaOutput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERMediaOutput *)nullableFromList:(NSArray<id> *)list;
+@interface VLC_PLAYERMediaCreateInput ()
++ (VLC_PLAYERMediaCreateInput *)fromList:(NSArray<id> *)list;
++ (nullable VLC_PLAYERMediaCreateInput *)nullableFromList:(NSArray<id> *)list;
 - (NSArray<id> *)toList;
 @end
 
@@ -61,74 +43,20 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 - (NSArray<id> *)toList;
 @end
 
-@interface VLC_PLAYERMediaPlayerInput ()
-+ (VLC_PLAYERMediaPlayerInput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERMediaPlayerInput *)nullableFromList:(NSArray<id> *)list;
+@interface VLC_PLAYERVideoViewCreateResult ()
++ (VLC_PLAYERVideoViewCreateResult *)fromList:(NSArray<id> *)list;
++ (nullable VLC_PLAYERVideoViewCreateResult *)nullableFromList:(NSArray<id> *)list;
 - (NSArray<id> *)toList;
 @end
 
-@interface VLC_PLAYERMediaPlayerOutput ()
-+ (VLC_PLAYERMediaPlayerOutput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERMediaPlayerOutput *)nullableFromList:(NSArray<id> *)list;
-- (NSArray<id> *)toList;
-@end
-
-@interface VLC_PLAYERVideoViewOutput ()
-+ (VLC_PLAYERVideoViewOutput *)fromList:(NSArray<id> *)list;
-+ (nullable VLC_PLAYERVideoViewOutput *)nullableFromList:(NSArray<id> *)list;
-- (NSArray<id> *)toList;
-@end
-
-@implementation VLC_PLAYERLibVlcInput
-+ (instancetype)makeWithOptions:(nullable NSArray<NSString *> *)options {
-  VLC_PLAYERLibVlcInput* pigeonResult = [[VLC_PLAYERLibVlcInput alloc] init];
-  pigeonResult.options = options;
-  return pigeonResult;
-}
-+ (VLC_PLAYERLibVlcInput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERLibVlcInput *pigeonResult = [[VLC_PLAYERLibVlcInput alloc] init];
-  pigeonResult.options = GetNullableObjectAtIndex(list, 0);
-  return pigeonResult;
-}
-+ (nullable VLC_PLAYERLibVlcInput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERLibVlcInput fromList:list] : nil;
-}
-- (NSArray<id> *)toList {
-  return @[
-    self.options ?: [NSNull null],
-  ];
-}
-@end
-
-@implementation VLC_PLAYERLibVlcOutput
-+ (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId {
-  VLC_PLAYERLibVlcOutput* pigeonResult = [[VLC_PLAYERLibVlcOutput alloc] init];
-  pigeonResult.libVlcId = libVlcId;
-  return pigeonResult;
-}
-+ (VLC_PLAYERLibVlcOutput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERLibVlcOutput *pigeonResult = [[VLC_PLAYERLibVlcOutput alloc] init];
-  pigeonResult.libVlcId = GetNullableObjectAtIndex(list, 0);
-  return pigeonResult;
-}
-+ (nullable VLC_PLAYERLibVlcOutput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERLibVlcOutput fromList:list] : nil;
-}
-- (NSArray<id> *)toList {
-  return @[
-    self.libVlcId ?: [NSNull null],
-  ];
-}
-@end
-
-@implementation VLC_PLAYERMediaInput
+@implementation VLC_PLAYERMediaCreateInput
 + (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId
     dataSourceType:(nullable NSNumber *)dataSourceType
     dataSourceValue:(nullable NSString *)dataSourceValue
     packageName:(nullable NSString *)packageName
     hwAcc:(nullable NSNumber *)hwAcc
     options:(nullable NSArray<NSString *> *)options {
-  VLC_PLAYERMediaInput* pigeonResult = [[VLC_PLAYERMediaInput alloc] init];
+  VLC_PLAYERMediaCreateInput* pigeonResult = [[VLC_PLAYERMediaCreateInput alloc] init];
   pigeonResult.libVlcId = libVlcId;
   pigeonResult.dataSourceType = dataSourceType;
   pigeonResult.dataSourceValue = dataSourceValue;
@@ -137,8 +65,8 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   pigeonResult.options = options;
   return pigeonResult;
 }
-+ (VLC_PLAYERMediaInput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERMediaInput *pigeonResult = [[VLC_PLAYERMediaInput alloc] init];
++ (VLC_PLAYERMediaCreateInput *)fromList:(NSArray<id> *)list {
+  VLC_PLAYERMediaCreateInput *pigeonResult = [[VLC_PLAYERMediaCreateInput alloc] init];
   pigeonResult.libVlcId = GetNullableObjectAtIndex(list, 0);
   pigeonResult.dataSourceType = GetNullableObjectAtIndex(list, 1);
   pigeonResult.dataSourceValue = GetNullableObjectAtIndex(list, 2);
@@ -147,8 +75,8 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
   pigeonResult.options = GetNullableObjectAtIndex(list, 5);
   return pigeonResult;
 }
-+ (nullable VLC_PLAYERMediaInput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERMediaInput fromList:list] : nil;
++ (nullable VLC_PLAYERMediaCreateInput *)nullableFromList:(NSArray<id> *)list {
+  return (list) ? [VLC_PLAYERMediaCreateInput fromList:list] : nil;
 }
 - (NSArray<id> *)toList {
   return @[
@@ -158,27 +86,6 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
     self.packageName ?: [NSNull null],
     self.hwAcc ?: [NSNull null],
     self.options ?: [NSNull null],
-  ];
-}
-@end
-
-@implementation VLC_PLAYERMediaOutput
-+ (instancetype)makeWithMediaId:(nullable NSNumber *)mediaId {
-  VLC_PLAYERMediaOutput* pigeonResult = [[VLC_PLAYERMediaOutput alloc] init];
-  pigeonResult.mediaId = mediaId;
-  return pigeonResult;
-}
-+ (VLC_PLAYERMediaOutput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERMediaOutput *pigeonResult = [[VLC_PLAYERMediaOutput alloc] init];
-  pigeonResult.mediaId = GetNullableObjectAtIndex(list, 0);
-  return pigeonResult;
-}
-+ (nullable VLC_PLAYERMediaOutput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERMediaOutput fromList:list] : nil;
-}
-- (NSArray<id> *)toList {
-  return @[
-    self.mediaId ?: [NSNull null],
   ];
 }
 @end
@@ -236,64 +143,22 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 }
 @end
 
-@implementation VLC_PLAYERMediaPlayerInput
-+ (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId {
-  VLC_PLAYERMediaPlayerInput* pigeonResult = [[VLC_PLAYERMediaPlayerInput alloc] init];
-  pigeonResult.libVlcId = libVlcId;
-  return pigeonResult;
-}
-+ (VLC_PLAYERMediaPlayerInput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERMediaPlayerInput *pigeonResult = [[VLC_PLAYERMediaPlayerInput alloc] init];
-  pigeonResult.libVlcId = GetNullableObjectAtIndex(list, 0);
-  return pigeonResult;
-}
-+ (nullable VLC_PLAYERMediaPlayerInput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERMediaPlayerInput fromList:list] : nil;
-}
-- (NSArray<id> *)toList {
-  return @[
-    self.libVlcId ?: [NSNull null],
-  ];
-}
-@end
-
-@implementation VLC_PLAYERMediaPlayerOutput
-+ (instancetype)makeWithMediaPlayerId:(nullable NSNumber *)mediaPlayerId {
-  VLC_PLAYERMediaPlayerOutput* pigeonResult = [[VLC_PLAYERMediaPlayerOutput alloc] init];
-  pigeonResult.mediaPlayerId = mediaPlayerId;
-  return pigeonResult;
-}
-+ (VLC_PLAYERMediaPlayerOutput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERMediaPlayerOutput *pigeonResult = [[VLC_PLAYERMediaPlayerOutput alloc] init];
-  pigeonResult.mediaPlayerId = GetNullableObjectAtIndex(list, 0);
-  return pigeonResult;
-}
-+ (nullable VLC_PLAYERMediaPlayerOutput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERMediaPlayerOutput fromList:list] : nil;
-}
-- (NSArray<id> *)toList {
-  return @[
-    self.mediaPlayerId ?: [NSNull null],
-  ];
-}
-@end
-
-@implementation VLC_PLAYERVideoViewOutput
+@implementation VLC_PLAYERVideoViewCreateResult
 + (instancetype)makeWithObjectId:(nullable NSNumber *)objectId
     textureId:(nullable NSNumber *)textureId {
-  VLC_PLAYERVideoViewOutput* pigeonResult = [[VLC_PLAYERVideoViewOutput alloc] init];
+  VLC_PLAYERVideoViewCreateResult* pigeonResult = [[VLC_PLAYERVideoViewCreateResult alloc] init];
   pigeonResult.objectId = objectId;
   pigeonResult.textureId = textureId;
   return pigeonResult;
 }
-+ (VLC_PLAYERVideoViewOutput *)fromList:(NSArray<id> *)list {
-  VLC_PLAYERVideoViewOutput *pigeonResult = [[VLC_PLAYERVideoViewOutput alloc] init];
++ (VLC_PLAYERVideoViewCreateResult *)fromList:(NSArray<id> *)list {
+  VLC_PLAYERVideoViewCreateResult *pigeonResult = [[VLC_PLAYERVideoViewCreateResult alloc] init];
   pigeonResult.objectId = GetNullableObjectAtIndex(list, 0);
   pigeonResult.textureId = GetNullableObjectAtIndex(list, 1);
   return pigeonResult;
 }
-+ (nullable VLC_PLAYERVideoViewOutput *)nullableFromList:(NSArray<id> *)list {
-  return (list) ? [VLC_PLAYERVideoViewOutput fromList:list] : nil;
++ (nullable VLC_PLAYERVideoViewCreateResult *)nullableFromList:(NSArray<id> *)list {
+  return (list) ? [VLC_PLAYERVideoViewCreateResult fromList:list] : nil;
 }
 - (NSArray<id> *)toList {
   return @[
@@ -309,21 +174,11 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 - (nullable id)readValueOfType:(UInt8)type {
   switch (type) {
     case 129: 
-      return [VLC_PLAYERLibVlcInput fromList:[self readValue]];
+      return [VLC_PLAYERMediaCreateInput fromList:[self readValue]];
     case 130: 
-      return [VLC_PLAYERLibVlcOutput fromList:[self readValue]];
-    case 131: 
-      return [VLC_PLAYERMediaInput fromList:[self readValue]];
-    case 132: 
-      return [VLC_PLAYERMediaOutput fromList:[self readValue]];
-    case 133: 
       return [VLC_PLAYERMediaVideoTrack fromList:[self readValue]];
-    case 134: 
-      return [VLC_PLAYERMediaPlayerInput fromList:[self readValue]];
-    case 135: 
-      return [VLC_PLAYERMediaPlayerOutput fromList:[self readValue]];
-    case 136: 
-      return [VLC_PLAYERVideoViewOutput fromList:[self readValue]];
+    case 131: 
+      return [VLC_PLAYERVideoViewCreateResult fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
   }
@@ -334,29 +189,14 @@ static id GetNullableObjectAtIndex(NSArray<id> *array, NSInteger key) {
 @end
 @implementation VLC_PLAYERMessagesPigeonCodecWriter
 - (void)writeValue:(id)value {
-  if ([value isKindOfClass:[VLC_PLAYERLibVlcInput class]]) {
+  if ([value isKindOfClass:[VLC_PLAYERMediaCreateInput class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERLibVlcOutput class]]) {
+  } else if ([value isKindOfClass:[VLC_PLAYERMediaVideoTrack class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERMediaInput class]]) {
+  } else if ([value isKindOfClass:[VLC_PLAYERVideoViewCreateResult class]]) {
     [self writeByte:131];
-    [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERMediaOutput class]]) {
-    [self writeByte:132];
-    [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERMediaVideoTrack class]]) {
-    [self writeByte:133];
-    [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERMediaPlayerInput class]]) {
-    [self writeByte:134];
-    [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERMediaPlayerOutput class]]) {
-    [self writeByte:135];
-    [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[VLC_PLAYERVideoViewOutput class]]) {
-    [self writeByte:136];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -398,11 +238,11 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
         binaryMessenger:binaryMessenger
         codec:VLC_PLAYERGetMessagesCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(createLibVlcInput:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createLibVlcInput:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(createLibVlcOptions:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createLibVlcOptions:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray<id> *args = message;
-        VLC_PLAYERLibVlcInput *arg_input = GetNullableObjectAtIndex(args, 0);
-        [api createLibVlcInput:arg_input completion:^(VLC_PLAYERLibVlcOutput *_Nullable output, FlutterError *_Nullable error) {
+        NSArray<NSString *> *arg_options = GetNullableObjectAtIndex(args, 0);
+        [api createLibVlcOptions:arg_options completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -440,8 +280,8 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
       NSCAssert([api respondsToSelector:@selector(createMediaInput:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createMediaInput:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray<id> *args = message;
-        VLC_PLAYERMediaInput *arg_input = GetNullableObjectAtIndex(args, 0);
-        [api createMediaInput:arg_input completion:^(VLC_PLAYERMediaOutput *_Nullable output, FlutterError *_Nullable error) {
+        VLC_PLAYERMediaCreateInput *arg_input = GetNullableObjectAtIndex(args, 0);
+        [api createMediaInput:arg_input completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -533,11 +373,11 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
         binaryMessenger:binaryMessenger
         codec:VLC_PLAYERGetMessagesCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(createMediaPlayerInput:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createMediaPlayerInput:completion:)", api);
+      NSCAssert([api respondsToSelector:@selector(createMediaPlayerLibVlcId:completion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createMediaPlayerLibVlcId:completion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
         NSArray<id> *args = message;
-        VLC_PLAYERMediaPlayerInput *arg_input = GetNullableObjectAtIndex(args, 0);
-        [api createMediaPlayerInput:arg_input completion:^(VLC_PLAYERMediaPlayerOutput *_Nullable output, FlutterError *_Nullable error) {
+        NSInteger arg_libVlcId = [GetNullableObjectAtIndex(args, 0) integerValue];
+        [api createMediaPlayerLibVlcId:arg_libVlcId completion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];
@@ -867,7 +707,7 @@ void SetUpVLC_PLAYERVlcApiWithSuffix(id<FlutterBinaryMessenger> binaryMessenger,
     if (api) {
       NSCAssert([api respondsToSelector:@selector(createVideoViewWithCompletion:)], @"VLC_PLAYERVlcApi api (%@) doesn't respond to @selector(createVideoViewWithCompletion:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        [api createVideoViewWithCompletion:^(VLC_PLAYERVideoViewOutput *_Nullable output, FlutterError *_Nullable error) {
+        [api createVideoViewWithCompletion:^(VLC_PLAYERVideoViewCreateResult *_Nullable output, FlutterError *_Nullable error) {
           callback(wrapResult(output, error));
         }];
       }];

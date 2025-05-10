@@ -5,7 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'message/messages.g.dart';
-import 'message/vlc_player_flutter_api.dart';
+import 'message/vlc_flutter_api.dart';
 import 'vlc/data_source.dart';
 import 'vlc/hw_acc.dart';
 import 'vlc/lib_vlc.dart';
@@ -26,8 +26,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   /// LibVLC
   @override
   Future<LibVlc> createLibVlc({List<String>? options}) async {
-    final output = await _api.createLibVlc(LibVlcInput(options: options));
-    return LibVlc(vlcId: output.libVlcId ?? -1);
+    return LibVlc(vlcId: await _api.createLibVlc(options));
   }
 
   @override
@@ -37,14 +36,15 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   /// Media
   @override
-  Future<Media> createMedia(LibVlc libVlc,
-      DataSource dataSource, {
-        String? packageName,
-        HwAcc? hwAcc,
-        List<String>? options,
-      }) async {
-    final output = await _api.createMedia(
-      MediaInput(
+  Future<Media> createMedia(
+    LibVlc libVlc,
+    DataSource dataSource, {
+    String? packageName,
+    HwAcc? hwAcc,
+    List<String>? options,
+  }) async {
+    final mediaId = await _api.createMedia(
+      MediaCreateInput(
         libVlcId: libVlc.vlcId,
         dataSourceType: dataSource.type.index,
         dataSourceValue: dataSource.value,
@@ -53,7 +53,7 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
         options: options,
       ),
     );
-    return Media(mediaId: output.mediaId ?? -1);
+    return Media(mediaId: mediaId);
   }
 
   @override
@@ -79,10 +79,9 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   /// MediaPlayer
   @override
   Future<MediaPlayer> createMediaPlayer(LibVlc libVlc) async {
-    final output = await _api.createMediaPlayer(
-      MediaPlayerInput(libVlcId: libVlc.vlcId),
+    return MediaPlayer(
+      mediaPlayerId: await _api.createMediaPlayer(libVlc.vlcId),
     );
-    return MediaPlayer(mediaPlayerId: output.mediaPlayerId ?? -1);
   }
 
   @override
@@ -94,8 +93,10 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<bool> mediaPlayerAttachVideoView(MediaPlayer mediaPlayer,
-      VideoView videoView,) async {
+  Future<bool> mediaPlayerAttachVideoView(
+    MediaPlayer mediaPlayer,
+    VideoView videoView,
+  ) async {
     return await _api.mediaPlayerAttachVideoView(
       mediaPlayer.mediaPlayerId,
       videoView.videoViewId,
@@ -123,9 +124,11 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<void> mediaPlayerSetTime(MediaPlayer mediaPlayer,
-      Duration time,
-      bool fast,) async {
+  Future<void> mediaPlayerSetTime(
+    MediaPlayer mediaPlayer,
+    Duration time,
+    bool fast,
+  ) async {
     await _api.mediaPlayerSetTime(
       mediaPlayer.mediaPlayerId,
       time.inMilliseconds,
@@ -140,9 +143,11 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
   }
 
   @override
-  Future<void> mediaPlayerSetPosition(MediaPlayer mediaPlayer,
-      double position,
-      bool fast,) async {
+  Future<void> mediaPlayerSetPosition(
+    MediaPlayer mediaPlayer,
+    double position,
+    bool fast,
+  ) async {
     await _api.mediaPlayerSetPosition(
       mediaPlayer.mediaPlayerId,
       position,
@@ -190,14 +195,16 @@ class MethodChannelVlcPlayer extends VlcPlayerPlatform {
 
   /// Video View
   @override
-  Future<VideoViewOutput> createVideoView() async {
+  Future<VideoViewCreateResult> createVideoView() async {
     return await _api.createVideoView();
   }
 
   @override
-  Future<bool> videoViewSetDefaultBufferSize(VideoView videoView,
-      int width,
-      int height,) async {
+  Future<bool> videoViewSetDefaultBufferSize(
+    VideoView videoView,
+    int width,
+    int height,
+  ) async {
     return await _api.videoViewSetDefaultBufferSize(
       videoView.videoViewId,
       width,

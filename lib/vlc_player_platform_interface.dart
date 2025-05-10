@@ -156,9 +156,7 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
   }
 
   Future<double> mediaPlayerGetRate(MediaPlayer mediaPlayer) async {
-    throw UnimplementedError(
-      'mediaPlayerGetRate() has not been implemented.',
-    );
+    throw UnimplementedError('mediaPlayerGetRate() has not been implemented.');
   }
 
   Future<bool> disposeMediaPlayer(MediaPlayer mediaPlayer) async {
@@ -166,7 +164,7 @@ abstract class VlcPlayerPlatform extends PlatformInterface {
   }
 
   /// Video View
-  Future<VideoViewOutput> createVideoView() async {
+  Future<VideoViewCreateResult> createVideoView() async {
     throw UnimplementedError('createVideoView() has not been implemented.');
   }
 

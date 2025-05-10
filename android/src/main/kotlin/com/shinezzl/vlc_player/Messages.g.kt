@@ -81,63 +81,7 @@ class FlutterError (
 ) : Throwable()
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class LibVlcInput (
-  val options: List<String>? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): LibVlcInput {
-      val options = pigeonVar_list[0] as List<String>?
-      return LibVlcInput(options)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      options,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is LibVlcInput) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class LibVlcOutput (
-  val libVlcId: Long? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): LibVlcOutput {
-      val libVlcId = pigeonVar_list[0] as Long?
-      return LibVlcOutput(libVlcId)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      libVlcId,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is LibVlcOutput) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class MediaInput (
+data class MediaCreateInput (
   val libVlcId: Long? = null,
   val dataSourceType: Long? = null,
   val dataSourceValue: String? = null,
@@ -147,14 +91,14 @@ data class MediaInput (
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MediaInput {
+    fun fromList(pigeonVar_list: List<Any?>): MediaCreateInput {
       val libVlcId = pigeonVar_list[0] as Long?
       val dataSourceType = pigeonVar_list[1] as Long?
       val dataSourceValue = pigeonVar_list[2] as String?
       val packageName = pigeonVar_list[3] as String?
       val hwAcc = pigeonVar_list[4] as Long?
       val options = pigeonVar_list[5] as List<String>?
-      return MediaInput(libVlcId, dataSourceType, dataSourceValue, packageName, hwAcc, options)
+      return MediaCreateInput(libVlcId, dataSourceType, dataSourceValue, packageName, hwAcc, options)
     }
   }
   fun toList(): List<Any?> {
@@ -168,35 +112,7 @@ data class MediaInput (
     )
   }
   override fun equals(other: Any?): Boolean {
-    if (other !is MediaInput) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class MediaOutput (
-  val mediaId: Long? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MediaOutput {
-      val mediaId = pigeonVar_list[0] as Long?
-      return MediaOutput(mediaId)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      mediaId,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MediaOutput) {
+    if (other !is MediaCreateInput) {
       return false
     }
     if (this === other) {
@@ -260,72 +176,16 @@ data class MediaVideoTrack (
 }
 
 /** Generated class from Pigeon that represents data sent in messages. */
-data class MediaPlayerInput (
-  val libVlcId: Long? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MediaPlayerInput {
-      val libVlcId = pigeonVar_list[0] as Long?
-      return MediaPlayerInput(libVlcId)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      libVlcId,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MediaPlayerInput) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class MediaPlayerOutput (
-  val mediaPlayerId: Long? = null
-)
- {
-  companion object {
-    fun fromList(pigeonVar_list: List<Any?>): MediaPlayerOutput {
-      val mediaPlayerId = pigeonVar_list[0] as Long?
-      return MediaPlayerOutput(mediaPlayerId)
-    }
-  }
-  fun toList(): List<Any?> {
-    return listOf(
-      mediaPlayerId,
-    )
-  }
-  override fun equals(other: Any?): Boolean {
-    if (other !is MediaPlayerOutput) {
-      return false
-    }
-    if (this === other) {
-      return true
-    }
-    return MessagesPigeonUtils.deepEquals(toList(), other.toList())  }
-
-  override fun hashCode(): Int = toList().hashCode()
-}
-
-/** Generated class from Pigeon that represents data sent in messages. */
-data class VideoViewOutput (
+data class VideoViewCreateResult (
   val objectId: Long? = null,
   val textureId: Long? = null
 )
  {
   companion object {
-    fun fromList(pigeonVar_list: List<Any?>): VideoViewOutput {
+    fun fromList(pigeonVar_list: List<Any?>): VideoViewCreateResult {
       val objectId = pigeonVar_list[0] as Long?
       val textureId = pigeonVar_list[1] as Long?
-      return VideoViewOutput(objectId, textureId)
+      return VideoViewCreateResult(objectId, textureId)
     }
   }
   fun toList(): List<Any?> {
@@ -335,7 +195,7 @@ data class VideoViewOutput (
     )
   }
   override fun equals(other: Any?): Boolean {
-    if (other !is VideoViewOutput) {
+    if (other !is VideoViewCreateResult) {
       return false
     }
     if (this === other) {
@@ -350,42 +210,17 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
     return when (type) {
       129.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LibVlcInput.fromList(it)
+          MediaCreateInput.fromList(it)
         }
       }
       130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          LibVlcOutput.fromList(it)
+          MediaVideoTrack.fromList(it)
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
-          MediaInput.fromList(it)
-        }
-      }
-      132.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MediaOutput.fromList(it)
-        }
-      }
-      133.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MediaVideoTrack.fromList(it)
-        }
-      }
-      134.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MediaPlayerInput.fromList(it)
-        }
-      }
-      135.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          MediaPlayerOutput.fromList(it)
-        }
-      }
-      136.toByte() -> {
-        return (readValue(buffer) as? List<Any?>)?.let {
-          VideoViewOutput.fromList(it)
+          VideoViewCreateResult.fromList(it)
         }
       }
       else -> super.readValueOfType(type, buffer)
@@ -393,36 +228,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
     when (value) {
-      is LibVlcInput -> {
+      is MediaCreateInput -> {
         stream.write(129)
         writeValue(stream, value.toList())
       }
-      is LibVlcOutput -> {
+      is MediaVideoTrack -> {
         stream.write(130)
         writeValue(stream, value.toList())
       }
-      is MediaInput -> {
+      is VideoViewCreateResult -> {
         stream.write(131)
-        writeValue(stream, value.toList())
-      }
-      is MediaOutput -> {
-        stream.write(132)
-        writeValue(stream, value.toList())
-      }
-      is MediaVideoTrack -> {
-        stream.write(133)
-        writeValue(stream, value.toList())
-      }
-      is MediaPlayerInput -> {
-        stream.write(134)
-        writeValue(stream, value.toList())
-      }
-      is MediaPlayerOutput -> {
-        stream.write(135)
-        writeValue(stream, value.toList())
-      }
-      is VideoViewOutput -> {
-        stream.write(136)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)
@@ -434,16 +249,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface VlcApi {
   /** LibVLC */
-  fun createLibVlc(input: LibVlcInput, callback: (Result<LibVlcOutput>) -> Unit)
+  fun createLibVlc(options: List<String>?, callback: (Result<Long>) -> Unit)
   fun disposeLibVlc(libVlcId: Long, callback: (Result<Boolean>) -> Unit)
   /** Media */
-  fun createMedia(input: MediaInput, callback: (Result<MediaOutput>) -> Unit)
+  fun createMedia(input: MediaCreateInput, callback: (Result<Long>) -> Unit)
   fun setMediaEventListener(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaParseAsync(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaGetVideoTrack(mediaId: Long, callback: (Result<MediaVideoTrack>) -> Unit)
   fun disposeMedia(mediaId: Long, callback: (Result<Boolean>) -> Unit)
   /** MediaPlayer */
-  fun createMediaPlayer(input: MediaPlayerInput, callback: (Result<MediaPlayerOutput>) -> Unit)
+  fun createMediaPlayer(libVlcId: Long, callback: (Result<Long>) -> Unit)
   fun mediaPlayerSetMedia(mediaPlayerId: Long, mediaId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaPlayerAttachVideoView(mediaPlayerId: Long, videoViewId: Long, callback: (Result<Boolean>) -> Unit)
   fun mediaPlayerPlay(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit)
@@ -461,7 +276,7 @@ interface VlcApi {
   fun mediaPlayerGetRate(mediaPlayerId: Long, callback: (Result<Double>) -> Unit)
   fun disposeMediaPlayer(mediaPlayerId: Long, callback: (Result<Boolean>) -> Unit)
   /** Video View */
-  fun createVideoView(callback: (Result<VideoViewOutput>) -> Unit)
+  fun createVideoView(callback: (Result<VideoViewCreateResult>) -> Unit)
   fun videoViewSetDefaultBufferSize(videoViewId: Long, width: Long, height: Long, callback: (Result<Boolean>) -> Unit)
   fun disposeVideoView(videoViewId: Long, callback: (Result<Boolean>) -> Unit)
 
@@ -479,8 +294,8 @@ interface VlcApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val inputArg = args[0] as LibVlcInput
-            api.createLibVlc(inputArg) { result: Result<LibVlcOutput> ->
+            val optionsArg = args[0] as List<String>?
+            api.createLibVlc(optionsArg) { result: Result<Long> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -519,8 +334,8 @@ interface VlcApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val inputArg = args[0] as MediaInput
-            api.createMedia(inputArg) { result: Result<MediaOutput> ->
+            val inputArg = args[0] as MediaCreateInput
+            api.createMedia(inputArg) { result: Result<Long> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -619,8 +434,8 @@ interface VlcApi {
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val inputArg = args[0] as MediaPlayerInput
-            api.createMediaPlayer(inputArg) { result: Result<MediaPlayerOutput> ->
+            val libVlcIdArg = args[0] as Long
+            api.createMediaPlayer(libVlcIdArg) { result: Result<Long> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))
@@ -960,7 +775,7 @@ interface VlcApi {
         val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createVideoView$separatedMessageChannelSuffix", codec)
         if (api != null) {
           channel.setMessageHandler { _, reply ->
-            api.createVideoView{ result: Result<VideoViewOutput> ->
+            api.createVideoView{ result: Result<VideoViewCreateResult> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(MessagesPigeonUtils.wrapError(error))

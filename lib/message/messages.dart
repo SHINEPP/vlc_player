@@ -15,27 +15,15 @@ import 'package:pigeon/pigeon.dart';
     dartPackageName: 'com.shinezzl.vlc_player',
   ),
 )
-// LibVlc
-class LibVlcInput {
-  List<String>? options;
-}
-
-class LibVlcOutput {
-  int? libVlcId;
-}
 
 // Media
-class MediaInput {
+class MediaCreateInput {
   int? libVlcId;
   int? dataSourceType;
   String? dataSourceValue;
   String? packageName;
   int? hwAcc;
   List<String>? options;
-}
-
-class MediaOutput {
-  int? mediaId;
 }
 
 class MediaVideoTrack {
@@ -50,17 +38,9 @@ class MediaVideoTrack {
   int? projection;
 }
 
-// Media Player
-class MediaPlayerInput {
-  int? libVlcId;
-}
-
-class MediaPlayerOutput {
-  int? mediaPlayerId;
-}
 
 // Video View
-class VideoViewOutput {
+class VideoViewCreateResult {
   int? objectId;
   int? textureId;
 }
@@ -69,14 +49,14 @@ class VideoViewOutput {
 abstract class VlcApi {
   /// LibVLC
   @async
-  LibVlcOutput createLibVlc(LibVlcInput input);
+  int createLibVlc(List<String>? options);
 
   @async
   bool disposeLibVlc(int libVlcId);
 
   /// Media
   @async
-  MediaOutput createMedia(MediaInput input);
+  int createMedia(MediaCreateInput input);
 
   @async
   bool setMediaEventListener(int mediaId);
@@ -92,7 +72,7 @@ abstract class VlcApi {
 
   /// MediaPlayer
   @async
-  MediaPlayerOutput createMediaPlayer(MediaPlayerInput input);
+  int createMediaPlayer(int libVlcId);
 
   @async
   bool mediaPlayerSetMedia(int mediaPlayerId, int mediaId);
@@ -144,7 +124,7 @@ abstract class VlcApi {
 
   /// Video View
   @async
-  VideoViewOutput createVideoView();
+  VideoViewCreateResult createVideoView();
 
   @async
   bool videoViewSetDefaultBufferSize(int videoViewId, int width, int height);

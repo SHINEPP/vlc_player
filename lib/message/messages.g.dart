@@ -39,90 +39,8 @@ bool _deepEquals(Object? a, Object? b) {
 }
 
 
-class LibVlcInput {
-  LibVlcInput({
-    this.options,
-  });
-
-  List<String>? options;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      options,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static LibVlcInput decode(Object result) {
-    result as List<Object?>;
-    return LibVlcInput(
-      options: (result[0] as List<Object?>?)?.cast<String>(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! LibVlcInput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class LibVlcOutput {
-  LibVlcOutput({
-    this.libVlcId,
-  });
-
-  int? libVlcId;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      libVlcId,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static LibVlcOutput decode(Object result) {
-    result as List<Object?>;
-    return LibVlcOutput(
-      libVlcId: result[0] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! LibVlcOutput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class MediaInput {
-  MediaInput({
+class MediaCreateInput {
+  MediaCreateInput({
     this.libVlcId,
     this.dataSourceType,
     this.dataSourceValue,
@@ -157,9 +75,9 @@ class MediaInput {
   Object encode() {
     return _toList();  }
 
-  static MediaInput decode(Object result) {
+  static MediaCreateInput decode(Object result) {
     result as List<Object?>;
-    return MediaInput(
+    return MediaCreateInput(
       libVlcId: result[0] as int?,
       dataSourceType: result[1] as int?,
       dataSourceValue: result[2] as String?,
@@ -172,48 +90,7 @@ class MediaInput {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MediaInput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class MediaOutput {
-  MediaOutput({
-    this.mediaId,
-  });
-
-  int? mediaId;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      mediaId,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static MediaOutput decode(Object result) {
-    result as List<Object?>;
-    return MediaOutput(
-      mediaId: result[0] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MediaOutput || other.runtimeType != runtimeType) {
+    if (other is! MediaCreateInput || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -309,90 +186,8 @@ class MediaVideoTrack {
 ;
 }
 
-class MediaPlayerInput {
-  MediaPlayerInput({
-    this.libVlcId,
-  });
-
-  int? libVlcId;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      libVlcId,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static MediaPlayerInput decode(Object result) {
-    result as List<Object?>;
-    return MediaPlayerInput(
-      libVlcId: result[0] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MediaPlayerInput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class MediaPlayerOutput {
-  MediaPlayerOutput({
-    this.mediaPlayerId,
-  });
-
-  int? mediaPlayerId;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      mediaPlayerId,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static MediaPlayerOutput decode(Object result) {
-    result as List<Object?>;
-    return MediaPlayerOutput(
-      mediaPlayerId: result[0] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! MediaPlayerOutput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class VideoViewOutput {
-  VideoViewOutput({
+class VideoViewCreateResult {
+  VideoViewCreateResult({
     this.objectId,
     this.textureId,
   });
@@ -411,9 +206,9 @@ class VideoViewOutput {
   Object encode() {
     return _toList();  }
 
-  static VideoViewOutput decode(Object result) {
+  static VideoViewCreateResult decode(Object result) {
     result as List<Object?>;
-    return VideoViewOutput(
+    return VideoViewCreateResult(
       objectId: result[0] as int?,
       textureId: result[1] as int?,
     );
@@ -422,7 +217,7 @@ class VideoViewOutput {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! VideoViewOutput || other.runtimeType != runtimeType) {
+    if (other is! VideoViewCreateResult || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -445,29 +240,14 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is LibVlcInput) {
+    }    else if (value is MediaCreateInput) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    }    else if (value is LibVlcOutput) {
+    }    else if (value is MediaVideoTrack) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is MediaInput) {
+    }    else if (value is VideoViewCreateResult) {
       buffer.putUint8(131);
-      writeValue(buffer, value.encode());
-    }    else if (value is MediaOutput) {
-      buffer.putUint8(132);
-      writeValue(buffer, value.encode());
-    }    else if (value is MediaVideoTrack) {
-      buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    }    else if (value is MediaPlayerInput) {
-      buffer.putUint8(134);
-      writeValue(buffer, value.encode());
-    }    else if (value is MediaPlayerOutput) {
-      buffer.putUint8(135);
-      writeValue(buffer, value.encode());
-    }    else if (value is VideoViewOutput) {
-      buffer.putUint8(136);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -478,21 +258,11 @@ class _PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129: 
-        return LibVlcInput.decode(readValue(buffer)!);
+        return MediaCreateInput.decode(readValue(buffer)!);
       case 130: 
-        return LibVlcOutput.decode(readValue(buffer)!);
-      case 131: 
-        return MediaInput.decode(readValue(buffer)!);
-      case 132: 
-        return MediaOutput.decode(readValue(buffer)!);
-      case 133: 
         return MediaVideoTrack.decode(readValue(buffer)!);
-      case 134: 
-        return MediaPlayerInput.decode(readValue(buffer)!);
-      case 135: 
-        return MediaPlayerOutput.decode(readValue(buffer)!);
-      case 136: 
-        return VideoViewOutput.decode(readValue(buffer)!);
+      case 131: 
+        return VideoViewCreateResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -513,14 +283,14 @@ class VlcApi {
   final String pigeonVar_messageChannelSuffix;
 
   /// LibVLC
-  Future<LibVlcOutput> createLibVlc(LibVlcInput input) async {
+  Future<int> createLibVlc(List<String>? options) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createLibVlc$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[input]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -537,7 +307,7 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as LibVlcOutput?)!;
+      return (pigeonVar_replyList[0] as int?)!;
     }
   }
 
@@ -570,7 +340,7 @@ class VlcApi {
   }
 
   /// Media
-  Future<MediaOutput> createMedia(MediaInput input) async {
+  Future<int> createMedia(MediaCreateInput input) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createMedia$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -594,7 +364,7 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as MediaOutput?)!;
+      return (pigeonVar_replyList[0] as int?)!;
     }
   }
 
@@ -711,14 +481,14 @@ class VlcApi {
   }
 
   /// MediaPlayer
-  Future<MediaPlayerOutput> createMediaPlayer(MediaPlayerInput input) async {
+  Future<int> createMediaPlayer(int libVlcId) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createMediaPlayer$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[input]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[libVlcId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -735,7 +505,7 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as MediaPlayerOutput?)!;
+      return (pigeonVar_replyList[0] as int?)!;
     }
   }
 
@@ -1158,7 +928,7 @@ class VlcApi {
   }
 
   /// Video View
-  Future<VideoViewOutput> createVideoView() async {
+  Future<VideoViewCreateResult> createVideoView() async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createVideoView$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -1182,7 +952,7 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as VideoViewOutput?)!;
+      return (pigeonVar_replyList[0] as VideoViewCreateResult?)!;
     }
   }
 

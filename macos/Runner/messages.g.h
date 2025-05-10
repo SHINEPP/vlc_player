@@ -10,26 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class VLC_PLAYERLibVlcInput;
-@class VLC_PLAYERLibVlcOutput;
-@class VLC_PLAYERMediaInput;
-@class VLC_PLAYERMediaOutput;
+@class VLC_PLAYERMediaCreateInput;
 @class VLC_PLAYERMediaVideoTrack;
-@class VLC_PLAYERMediaPlayerInput;
-@class VLC_PLAYERMediaPlayerOutput;
-@class VLC_PLAYERVideoViewOutput;
+@class VLC_PLAYERVideoViewCreateResult;
 
-@interface VLC_PLAYERLibVlcInput : NSObject
-+ (instancetype)makeWithOptions:(nullable NSArray<NSString *> *)options;
-@property(nonatomic, copy, nullable) NSArray<NSString *> * options;
-@end
-
-@interface VLC_PLAYERLibVlcOutput : NSObject
-+ (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId;
-@property(nonatomic, strong, nullable) NSNumber * libVlcId;
-@end
-
-@interface VLC_PLAYERMediaInput : NSObject
+@interface VLC_PLAYERMediaCreateInput : NSObject
 + (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId
     dataSourceType:(nullable NSNumber *)dataSourceType
     dataSourceValue:(nullable NSString *)dataSourceValue
@@ -42,11 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString * packageName;
 @property(nonatomic, strong, nullable) NSNumber * hwAcc;
 @property(nonatomic, copy, nullable) NSArray<NSString *> * options;
-@end
-
-@interface VLC_PLAYERMediaOutput : NSObject
-+ (instancetype)makeWithMediaId:(nullable NSNumber *)mediaId;
-@property(nonatomic, strong, nullable) NSNumber * mediaId;
 @end
 
 @interface VLC_PLAYERMediaVideoTrack : NSObject
@@ -70,17 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSNumber * projection;
 @end
 
-@interface VLC_PLAYERMediaPlayerInput : NSObject
-+ (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId;
-@property(nonatomic, strong, nullable) NSNumber * libVlcId;
-@end
-
-@interface VLC_PLAYERMediaPlayerOutput : NSObject
-+ (instancetype)makeWithMediaPlayerId:(nullable NSNumber *)mediaPlayerId;
-@property(nonatomic, strong, nullable) NSNumber * mediaPlayerId;
-@end
-
-@interface VLC_PLAYERVideoViewOutput : NSObject
+@interface VLC_PLAYERVideoViewCreateResult : NSObject
 + (instancetype)makeWithObjectId:(nullable NSNumber *)objectId
     textureId:(nullable NSNumber *)textureId;
 @property(nonatomic, strong, nullable) NSNumber * objectId;
@@ -92,16 +62,16 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 
 @protocol VLC_PLAYERVlcApi
 /// LibVLC
-- (void)createLibVlcInput:(VLC_PLAYERLibVlcInput *)input completion:(void (^)(VLC_PLAYERLibVlcOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)createLibVlcOptions:(nullable NSArray<NSString *> *)options completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeLibVlcLibVlcId:(NSInteger)libVlcId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// Media
-- (void)createMediaInput:(VLC_PLAYERMediaInput *)input completion:(void (^)(VLC_PLAYERMediaOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)createMediaInput:(VLC_PLAYERMediaCreateInput *)input completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)setMediaEventListenerMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaParseAsyncMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaGetVideoTrackMediaId:(NSInteger)mediaId completion:(void (^)(VLC_PLAYERMediaVideoTrack *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaMediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// MediaPlayer
-- (void)createMediaPlayerInput:(VLC_PLAYERMediaPlayerInput *)input completion:(void (^)(VLC_PLAYERMediaPlayerOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)createMediaPlayerLibVlcId:(NSInteger)libVlcId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaPlayerSetMediaMediaPlayerId:(NSInteger)mediaPlayerId mediaId:(NSInteger)mediaId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaPlayerAttachVideoViewMediaPlayerId:(NSInteger)mediaPlayerId videoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)mediaPlayerPlayMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
@@ -119,7 +89,7 @@ NSObject<FlutterMessageCodec> *VLC_PLAYERGetMessagesCodec(void);
 - (void)mediaPlayerGetRateMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeMediaPlayerMediaPlayerId:(NSInteger)mediaPlayerId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 /// Video View
-- (void)createVideoViewWithCompletion:(void (^)(VLC_PLAYERVideoViewOutput *_Nullable, FlutterError *_Nullable))completion;
+- (void)createVideoViewWithCompletion:(void (^)(VLC_PLAYERVideoViewCreateResult *_Nullable, FlutterError *_Nullable))completion;
 - (void)videoViewSetDefaultBufferSizeVideoViewId:(NSInteger)videoViewId width:(NSInteger)width height:(NSInteger)height completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 - (void)disposeVideoViewVideoViewId:(NSInteger)videoViewId completion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
 @end
