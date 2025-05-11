@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _controller = VlcPlayerController.network(
-      "http://192.168.1.18:9000/video/落凡尘-2024_HD国语中字/落凡尘-2024_HD国语中字.mp4",
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     );
   }
 

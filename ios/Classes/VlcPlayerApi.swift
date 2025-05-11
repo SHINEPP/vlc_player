@@ -14,9 +14,11 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     private let messenger: FlutterBinaryMessenger
     private let objectHelper = ObjectHelper()
+    private let flutterApi: VlcFlutterApi
     
     init(messenger: FlutterBinaryMessenger) {
         self.messenger = messenger
+        flutterApi = VlcFlutterApi(binaryMessenger: messenger)
         super.init()
         
         VlcApiSetup.setUp(binaryMessenger: messenger, api: self)
@@ -46,7 +48,9 @@ public class VlcPlayerApi: NSObject, VlcApi {
             media = VLCMedia(path:  input.dataSourceValue ?? "")
             break
         case DataSourceType.network.rawValue:
-            media = VLCMedia(url: URL(string: input.dataSourceValue ?? "")!)
+            if let url = URL(string: input.dataSourceValue ?? "") {
+                media = VLCMedia(url: url)
+            }
             break
         default:
             break;
@@ -55,8 +59,11 @@ public class VlcPlayerApi: NSObject, VlcApi {
             completion(.failure(NSError(domain: "createMedia", code: 1)))
             return
         }
-        let mediaId = objectHelper.putObject(media)
         
+        let mediaWrapper = MediaWrapper(media: media!, flutterApi: flutterApi)
+        let mediaId = objectHelper.putObject(mediaWrapper)
+        mediaWrapper.setMediaId(mediaId: mediaId)
+
         switch(input.hwAcc) {
         case HwAcc.decoding.rawValue:
             media?.addOption(":no-mediacodec-dr")
@@ -74,15 +81,39 @@ public class VlcPlayerApi: NSObject, VlcApi {
     }
     
     func setMediaEventListener(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("setMediaEventListener()")
+        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
+        mediaWrapper?.setMediaEventListener()
+        completion(.success(true))
     }
     
     func mediaParseAsync(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("mediaParseAsync()")
+        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
+        let media = mediaWrapper?.getMedia()
+        media?.parse(options: VLCMediaParsingOptions.parseNetwork)
+        completion(.success(true))
     }
     
     func mediaGetVideoTrack(mediaId: Int64, completion: @escaping (Result<MediaVideoTrack, Error>) -> Void) {
+        print("mediaGetVideoTrack()")
+        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
+        let media = mediaWrapper?.getMedia()
+        let videoTracks = media?.videoTracks ?? []
         
+        var videoTrack: VLCMedia.VideoTrack?
+        if let track = media?.videoTracks.first {
+            if track.type == .video, let vTrack = track as? VLCMedia.VideoTrack {
+                videoTrack = vTrack
+            }
+        }
+        
+        let result = MediaVideoTrack(
+            duration: Int64(media?.length.intValue ?? 0),
+            height: Int64(videoTrack?.height ?? 0),
+            width: Int64(videoTrack?.width ?? 0)
+        )
+        completion(.success(result))
     }
     
     func mediaGetAudioTrack(mediaId: Int64, completion: @escaping (Result<[MediaAudioTrack], Error>) -> Void) {
@@ -94,24 +125,48 @@ public class VlcPlayerApi: NSObject, VlcApi {
     }
     
     func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("disposeMedia()")
+        let mediaWrapper: MediaWrapper? = objectHelper.removeObject(id: mediaId)
+        completion(.success(true))
     }
     
     // MediaPlayer
     func createMediaPlayer(libVlcId: Int64, completion: @escaping (Result<Int64, Error>) -> Void) {
+        print("createMediaPlayer()")
+        let libVlc: VLCLibrary? = objectHelper.getObject(id: libVlcId)
+        if (libVlc == nil) {
+            completion(.failure(NSError(domain: "createMediaPlayer", code: 1)))
+            return
+        }
         
+        let mediaPlayer = VLCMediaPlayer(library: libVlc!)
+        let mediaPlayerWrapper = MediaPlayerWrapper(mediaPlayer: mediaPlayer, flutterApi: flutterApi)
+        let mediaPlayerId = objectHelper.putObject(mediaPlayerWrapper)
+        mediaPlayerWrapper.setMediaPlayerId(mediaPlayerId: mediaPlayerId)
+        completion(.success(mediaPlayerId))
     }
     
     func mediaPlayerSetMedia(mediaPlayerId: Int64, mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("mediaPlayerSetMedia()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
+        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
+        let media = mediaWrapper?.getMedia()
+        mediaPlayer?.media = media
+        completion(.success(true))
     }
     
     func mediaPlayerAttachVideoView(mediaPlayerId: Int64, videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("mediaPlayerAttachVideoView()")
+        completion(.success(true))
     }
     
     func mediaPlayerPlay(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("mediaPlayerPlay()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
+        mediaPlayer?.play()
+        completion(.success(true))
     }
     
     func mediaPlayerPause(mediaPlayerId: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -168,14 +223,20 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     // VideoView
     func createVideoView(completion: @escaping (Result<VideoViewCreateResult, Error>) -> Void) {
-        
+        print("createVideoView()")
+        let view = UIView(frame: CGRectZero)
+        let videoView = VideoView(view: view)
+        let videoViewId = objectHelper.putObject(videoView)
+        completion(.success(VideoViewCreateResult(objectId: videoViewId)))
     }
     
     func videoViewSetDefaultBufferSize(videoViewId: Int64, width: Int64, height: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("videoViewSetDefaultBufferSize()")
+        completion(.success(true))
     }
     
     func disposeVideoView(videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("disposeVideoView()")
+        completion(.success(true))
     }
 }
