@@ -132,6 +132,8 @@ func deepHashMessages(value: Any?, hasher: inout Hasher) {
 
     
 
+/// dart run pigeon --input lib/message/messages.dart
+///
 /// Generated class from Pigeon that represents data sent in messages.
 struct MediaCreateInput: Hashable {
   var libVlcId: Int64? = nil

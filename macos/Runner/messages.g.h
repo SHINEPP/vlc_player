@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class VLC_PLAYERMediaSubtitleTrack;
 @class VLC_PLAYERVideoViewCreateResult;
 
+/// dart run pigeon --input lib/message/messages.dart
 @interface VLC_PLAYERMediaCreateInput : NSObject
 + (instancetype)makeWithLibVlcId:(nullable NSNumber *)libVlcId
     dataSourceType:(nullable NSNumber *)dataSourceType

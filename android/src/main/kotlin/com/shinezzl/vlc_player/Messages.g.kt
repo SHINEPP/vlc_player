@@ -80,7 +80,11 @@ class FlutterError (
   val details: Any? = null
 ) : Throwable()
 
-/** Generated class from Pigeon that represents data sent in messages. */
+/**
+ * dart run pigeon --input lib/message/messages.dart
+ *
+ * Generated class from Pigeon that represents data sent in messages.
+ */
 data class MediaCreateInput (
   val libVlcId: Long? = null,
   val dataSourceType: Long? = null,

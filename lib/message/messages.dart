@@ -1,12 +1,14 @@
 import 'package:pigeon/pigeon.dart';
 
+/// dart run pigeon --input lib/message/messages.dart
+
 @ConfigurePigeon(
   PigeonOptions(
     dartOut: 'lib/message/messages.g.dart',
     dartOptions: DartOptions(),
     kotlinOut: 'android/src/main/kotlin/com/shinezzl/vlc_player/Messages.g.kt',
     kotlinOptions: KotlinOptions(),
-    swiftOut: 'ios/Runner/Messages.g.swift',
+    swiftOut: 'ios/Classes/Messages.g.swift',
     swiftOptions: SwiftOptions(),
     objcHeaderOut: 'macos/Runner/messages.g.h',
     objcSourceOut: 'macos/Runner/messages.g.m',

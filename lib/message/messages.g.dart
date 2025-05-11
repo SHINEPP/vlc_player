@@ -39,6 +39,7 @@ bool _deepEquals(Object? a, Object? b) {
 }
 
 
+/// dart run pigeon --input lib/message/messages.dart
 class MediaCreateInput {
   MediaCreateInput({
     this.libVlcId,
