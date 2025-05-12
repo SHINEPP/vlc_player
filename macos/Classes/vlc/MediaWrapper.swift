@@ -64,4 +64,8 @@ class MediaWrapper : NSObject, VLCMediaDelegate {
             }
         }
     }
+    
+    func release() {
+        media.delegate = self
+    }
 }

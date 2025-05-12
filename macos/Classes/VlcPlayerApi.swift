@@ -34,7 +34,7 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     func disposeLibVlc(libVlcId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("disposeLibVlc()")
-        let libVlc : VLCLibrary? = objectHelper.removeObject(id: libVlcId)
+        let _ : VLCLibrary? = objectHelper.removeObject(id: libVlcId)
         completion(.success(true))
     }
     
@@ -56,13 +56,13 @@ public class VlcPlayerApi: NSObject, VlcApi {
             break;
         }
         if (media == nil) {
-            completion(.failure(NSError(domain: "createMedia", code: 1)))
+            completion(.failure(NSError(domain: "createMedia(), dataSourceType error", code: 0)))
             return
         }
         
         let mediaWrapper = MediaWrapper(media: media!, libVlcId: input.libVlcId!, flutterApi: flutterApi)
-        let mediaId = objectHelper.putObject(mediaWrapper)
-        mediaWrapper.setMediaId(mediaId: mediaId)
+        let mediaWrapperId = objectHelper.putObject(mediaWrapper)
+        mediaWrapper.setMediaId(mediaId: mediaWrapperId)
 
         switch(input.hwAcc) {
         case HwAcc.decoding.rawValue:
@@ -73,11 +73,13 @@ public class VlcPlayerApi: NSObject, VlcApi {
             break;
         }
         
-        let options = input.options ?? []
-        for option in options {
-            media?.addOption(option)
+        if let options = input.options {
+            for option in options {
+                media?.addOption(option)
+            }
         }
-        completion(.success(mediaId))
+        
+        completion(.success(mediaWrapperId))
     }
     
     func setMediaEventListener(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -89,42 +91,39 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     func mediaParseAsync(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("mediaParseAsync()")
-        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
-        let media = mediaWrapper?.getMedia()
-        //let libVlcId: Int64? = mediaWrapper?.getLibVlcId()
-        //let libVlc: VLCLibrary? = objectHelper.getObject(id: libVlcId!)
-        //let options: VLCMediaParsingOptions = [.parseNetwork, .parseLocal]
-        //media?.parse(options: options, timeout: -1, library: libVlc!)
-        media!.parse(options: .parseNetwork)
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 3.0) {
-            let duration = media!.length.intValue  // 毫秒
-            print("媒体时长：\(duration) 毫秒")
+        var result = false
+        if let mediaWrapper: MediaWrapper = objectHelper.getObject(id: mediaId) {
+            let media = mediaWrapper.getMedia()
+            let libVlcId = mediaWrapper.getLibVlcId()
+            if let libVlc: VLCLibrary = objectHelper.getObject(id: libVlcId) {
+                let options: VLCMediaParsingOptions = [.parseNetwork, .parseLocal]
+                result = media.parse(options: options, timeout: -1, library: libVlc) == 0
+            }
         }
-
-        completion(.success(true))
+        completion(.success(result))
     }
     
     func mediaGetVideoTrack(mediaId: Int64, completion: @escaping (Result<MediaVideoTrack, Error>) -> Void) {
         print("mediaGetVideoTrack()")
-        let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
-        let media = mediaWrapper?.getMedia()
-        
-        var videoTrack: VLCMedia.VideoTrack?
-        if let track = media?.videoTracks.first {
-            if track.type == .video, let vTrack = track as? VLCMedia.VideoTrack {
-                videoTrack = vTrack
-                print("mediaGetVideoTrack() 1")
+        var mediaVideoTrack: MediaVideoTrack? = nil
+        if let mediaWrapper: MediaWrapper = objectHelper.getObject(id: mediaId) {
+            let media = mediaWrapper.getMedia()
+            if let track = media.videoTracks.first {
+                if track.type == .video, let vTrack = track.video {
+                    mediaVideoTrack = MediaVideoTrack(
+                        duration: Int64(media.length.intValue),
+                        height: Int64(vTrack.height),
+                        width: Int64(vTrack.width)
+                    )
+                }
             }
         }
         
-        print("mediaGetVideoTrack(), height = \(String(describing: videoTrack?.height))")
-        let result = MediaVideoTrack(
-            duration: Int64(media?.length.intValue ?? 0),
-            height: Int64(videoTrack?.height ?? 0),
-            width: Int64(videoTrack?.width ?? 0)
-        )
-        completion(.success(result))
+        if let vTrack = mediaVideoTrack {
+            completion(.success(vTrack))
+        } else {
+            completion(.failure(NSError(domain: "mediaGetVideoTrack(), no track", code: 0)))
+        }
     }
     
     func mediaGetAudioTrack(mediaId: Int64, completion: @escaping (Result<[MediaAudioTrack], Error>) -> Void) {
@@ -137,7 +136,8 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     func disposeMedia(mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("disposeMedia()")
-        let _: MediaWrapper? = objectHelper.removeObject(id: mediaId)
+        let mediaWrapper: MediaWrapper? = objectHelper.removeObject(id: mediaId)
+        mediaWrapper?.release()
         completion(.success(true))
     }
     
@@ -146,29 +146,53 @@ public class VlcPlayerApi: NSObject, VlcApi {
         print("createMediaPlayer()")
         let libVlc: VLCLibrary? = objectHelper.getObject(id: libVlcId)
         if (libVlc == nil) {
-            completion(.failure(NSError(domain: "createMediaPlayer", code: 1)))
+            completion(.failure(NSError(domain: "createMediaPlayer(), no found libVlc", code: 0)))
             return
         }
         
         let mediaPlayer = VLCMediaPlayer(library: libVlc!)
         let mediaPlayerWrapper = MediaPlayerWrapper(mediaPlayer: mediaPlayer, flutterApi: flutterApi)
-        let mediaPlayerId = objectHelper.putObject(mediaPlayerWrapper)
-        mediaPlayerWrapper.setMediaPlayerId(mediaPlayerId: mediaPlayerId)
-        completion(.success(mediaPlayerId))
+        let mediaPlayerWrapperId = objectHelper.putObject(mediaPlayerWrapper)
+        mediaPlayerWrapper.setMediaPlayerWrapperId(mediaPlayerWrapperId: mediaPlayerWrapperId)
+        completion(.success(mediaPlayerWrapperId))
     }
     
     func mediaPlayerSetMedia(mediaPlayerId: Int64, mediaId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("mediaPlayerSetMedia()")
         let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        if (mediaPlayerWrapper == nil) {
+            completion(.failure(NSError(domain: "mediaPlayerSetMedia(), no found MediaPlayer", code: 0)))
+            return
+        }
         let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
-        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
-        let media = mediaWrapper?.getMedia()
-        mediaPlayer?.media = media
+        if (mediaWrapper == nil) {
+            completion(.failure(NSError(domain: "mediaPlayerSetMedia(), no found Media", code: 0)))
+            return
+        }
+        
+        let mediaPlayer = mediaPlayerWrapper!.getMediaPlayer()
+        let media = mediaWrapper!.getMedia()
+        mediaPlayer.media = media
         completion(.success(true))
     }
     
     func mediaPlayerAttachVideoView(mediaPlayerId: Int64, videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("mediaPlayerAttachVideoView()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        if (mediaPlayerWrapper == nil) {
+            completion(.failure(NSError(domain: "mediaPlayerAttachVideoView(), no found MediaPlayer", code: 0)))
+            return
+        }
+        let videoView: VideoView? = objectHelper.getObject(id: videoViewId)
+        if (videoView == nil) {
+            completion(.failure(NSError(domain: "mediaPlayerAttachVideoView(), no found VideoView", code: 0)))
+            return
+        }
+        
+        let mediaPlayer = mediaPlayerWrapper!.getMediaPlayer()
+        let view = videoView!.getView()
+        mediaPlayer.drawable = view
+        
         completion(.success(true))
     }
     
@@ -229,16 +253,19 @@ public class VlcPlayerApi: NSObject, VlcApi {
     }
     
     func disposeMediaPlayer(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("disposeMediaPlayer()")
+        let _: MediaPlayerWrapper? = objectHelper.removeObject(id: mediaPlayerId)
+        completion(.success(true))
     }
     
     // VideoView
     func createVideoView(completion: @escaping (Result<VideoViewCreateResult, Error>) -> Void) {
         print("createVideoView()")
-        //let view = UIView(frame: CGRectZero)
-        //let videoView = VideoView(view: view)
-        //let videoViewId = objectHelper.putObject(videoView)
-        //completion(.success(VideoViewCreateResult(objectId: videoViewId)))
+        let view = VLCVideoView(frame: CGRectZero)
+        view.fillScreen = true
+        let videoView = VideoView(view: view)
+        let videoViewId = objectHelper.putObject(videoView)
+        completion(.success(VideoViewCreateResult(objectId: videoViewId)))
     }
     
     func videoViewSetDefaultBufferSize(videoViewId: Int64, width: Int64, height: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -248,6 +275,7 @@ public class VlcPlayerApi: NSObject, VlcApi {
     
     func disposeVideoView(videoViewId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
         print("disposeVideoView()")
+        let _: VideoView? = objectHelper.removeObject(id: videoViewId)
         completion(.success(true))
     }
 }

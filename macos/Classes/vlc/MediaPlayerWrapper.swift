@@ -14,7 +14,7 @@ class MediaPlayerWrapper : NSObject {
     
     private let mediaPlayer: VLCMediaPlayer
     private let flutterApi: VlcFlutterApi
-    private var mediaPlayerId: Int64 = 0
+    private var mediaPlayerWrapperId: Int64 = 0
     
     init(mediaPlayer: VLCMediaPlayer, flutterApi: VlcFlutterApi) {
         self.mediaPlayer = mediaPlayer
@@ -26,7 +26,7 @@ class MediaPlayerWrapper : NSObject {
         return mediaPlayer
     }
     
-    func setMediaPlayerId(mediaPlayerId: Int64) {
-        self.mediaPlayerId = mediaPlayerId
+    func setMediaPlayerWrapperId(mediaPlayerWrapperId: Int64) {
+        self.mediaPlayerWrapperId = mediaPlayerWrapperId
     }
 }

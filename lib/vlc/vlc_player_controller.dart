@@ -108,15 +108,17 @@ class VlcPlayerController {
 
   Future<void> _init() async {
     _libVlc = await LibVlc.create();
-    _mediaPlayer = await MediaPlayer.create(_libVlc);
     _media = await Media.create(libVlc: _libVlc, dataSource: dataSource);
     await _media.parseAsync();
     final videoTrack = await _media.getVideoTrack();
     _videoTrack = videoTrack;
+    
     final width = videoTrack.width > 0 ? videoTrack.width : 1920;
     final height = videoTrack.height > 0 ? videoTrack.height : 1080;
     _videoView = await VideoView.create();
     _videoView.setDefaultBufferSize(width, height);
+
+    _mediaPlayer = await MediaPlayer.create(_libVlc);
     await _mediaPlayer.attachVideoView(_videoView);
     await _mediaPlayer.setMedia(_media);
     _initCompleter.complete(true);
