@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _controller = VlcPlayerController.network(
-      "https://s3.ap-southeast-2.amazonaws.com/app-4k-wallpaper-list/res/Live/live/1.mp4",
+      "http://streams.videolan.org/streams/mp4/Mr_MrsSmith-h264_aac.mp4",
     );
   }
 
