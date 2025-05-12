@@ -205,15 +205,27 @@ public class VlcPlayerApi: NSObject, VlcApi {
     }
     
     func mediaPlayerPause(mediaPlayerId: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
-        
+        print("mediaPlayerPause()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
+        mediaPlayer?.pause()
+        completion(.success(()))
     }
     
     func mediaPlayerStop(mediaPlayerId: Int64, completion: @escaping (Result<Void, Error>) -> Void) {
-        
+        print("mediaPlayerStop()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
+        mediaPlayer?.stop()
+        completion(.success(()))
     }
     
     func mediaPlayerIsPlaying(mediaPlayerId: Int64, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
+        print("mediaPlayerIsPlaying()")
+        let mediaPlayerWrapper: MediaPlayerWrapper? = objectHelper.getObject(id: mediaPlayerId)
+        let mediaPlayer = mediaPlayerWrapper?.getMediaPlayer()
+        let isPlaying = mediaPlayer?.isPlaying ?? false
+        completion(.success(isPlaying))
     }
     
     func mediaPlayerSetTime(mediaPlayerId: Int64, time: Int64, fast: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -277,5 +289,11 @@ public class VlcPlayerApi: NSObject, VlcApi {
         print("disposeVideoView()")
         let _: VideoView? = objectHelper.removeObject(id: videoViewId)
         completion(.success(true))
+    }
+    
+    func getVideoViewDiplayView(videoViewId: Int64) -> VLCVideoView {
+        print("getVideoViewDiplayView()")
+        let videoView: VideoView? = objectHelper.getObject(id: videoViewId)
+        return videoView!.getView()
     }
 }
