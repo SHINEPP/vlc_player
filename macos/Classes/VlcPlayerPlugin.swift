@@ -2,18 +2,12 @@ import Cocoa
 import FlutterMacOS
 
 public class VlcPlayerPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "vlc_player", binaryMessenger: registrar.messenger)
-    let instance = VlcPlayerPlugin()
-    registrar.addMethodCallDelegate(instance, channel: channel)
-  }
+    private static var vlcApi: VlcPlayerApi? = nil;
 
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
-    default:
-      result(FlutterMethodNotImplemented)
+    public static func register(with registrar: FlutterPluginRegistrar) {
+        vlcApi = VlcPlayerApi(messenger: registrar.messenger)
+        
+        let factory = VlcPlayerViewFactory(vlcApi: vlcApi!)
+        registrar.register(factory, withId: "vlc_player_plugin/buildVideoView")
     }
-  }
 }

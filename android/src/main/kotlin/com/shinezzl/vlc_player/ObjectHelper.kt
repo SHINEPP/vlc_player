@@ -20,4 +20,9 @@ class ObjectHelper {
     fun <T> getObject(id: Long): T? {
         return vlcObjects[id] as T?
     }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> removeObject(id: Long): T? {
+        return vlcObjects.remove(id) as T?
+    }
 }

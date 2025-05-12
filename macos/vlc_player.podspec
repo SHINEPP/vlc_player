@@ -23,8 +23,10 @@ VLC Player Plugin
   # s.resource_bundles = {'vlc_player_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 
   s.dependency 'FlutterMacOS'
-
   s.platform = :osx, '10.11'
+  s.dependency 'VLCKit', '~> 4.0.0a11'
+  s.static_framework = true
+
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version = '5.0'
 end

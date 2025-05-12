@@ -14,6 +14,16 @@ PlatformException _createConnectionError(String channelName) {
     message: 'Unable to establish connection on channel: "$channelName".',
   );
 }
+
+List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
+  if (empty) {
+    return <Object?>[];
+  }
+  if (error == null) {
+    return <Object?>[result];
+  }
+  return <Object?>[error.code, error.message, error.details];
+}
 bool _deepEquals(Object? a, Object? b) {
   if (a is List && b is List) {
     return a.length == b.length &&
@@ -29,90 +39,9 @@ bool _deepEquals(Object? a, Object? b) {
 }
 
 
-class LibVlcInput {
-  LibVlcInput({
-    this.options,
-  });
-
-  List<String>? options;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      options,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static LibVlcInput decode(Object result) {
-    result as List<Object?>;
-    return LibVlcInput(
-      options: (result[0] as List<Object?>?)?.cast<String>(),
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! LibVlcInput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class LibVlcOutput {
-  LibVlcOutput({
-    this.libVlcId,
-  });
-
-  int? libVlcId;
-
-  List<Object?> _toList() {
-    return <Object?>[
-      libVlcId,
-    ];
-  }
-
-  Object encode() {
-    return _toList();  }
-
-  static LibVlcOutput decode(Object result) {
-    result as List<Object?>;
-    return LibVlcOutput(
-      libVlcId: result[0] as int?,
-    );
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  bool operator ==(Object other) {
-    if (other is! LibVlcOutput || other.runtimeType != runtimeType) {
-      return false;
-    }
-    if (identical(this, other)) {
-      return true;
-    }
-    return _deepEquals(encode(), other.encode());
-  }
-
-  @override
-  // ignore: avoid_equals_and_hash_code_on_mutable_classes
-  int get hashCode => Object.hashAll(_toList())
-;
-}
-
-class MediaInput {
-  MediaInput({
+/// dart run pigeon --input lib/message/messages.dart
+class MediaCreateInput {
+  MediaCreateInput({
     this.libVlcId,
     this.dataSourceType,
     this.dataSourceValue,
@@ -147,9 +76,9 @@ class MediaInput {
   Object encode() {
     return _toList();  }
 
-  static MediaInput decode(Object result) {
+  static MediaCreateInput decode(Object result) {
     result as List<Object?>;
-    return MediaInput(
+    return MediaCreateInput(
       libVlcId: result[0] as int?,
       dataSourceType: result[1] as int?,
       dataSourceValue: result[2] as String?,
@@ -162,7 +91,7 @@ class MediaInput {
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MediaInput || other.runtimeType != runtimeType) {
+    if (other is! MediaCreateInput || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -177,33 +106,73 @@ class MediaInput {
 ;
 }
 
-class MediaOutput {
-  MediaOutput({
-    this.mediaId,
+class MediaVideoTrack {
+  MediaVideoTrack({
+    this.duration,
+    this.height,
+    this.width,
+    this.sarNum,
+    this.sarDen,
+    this.frameRateNum,
+    this.frameRateDen,
+    this.orientation,
+    this.projection,
   });
 
-  int? mediaId;
+  int? duration;
+
+  int? height;
+
+  int? width;
+
+  int? sarNum;
+
+  int? sarDen;
+
+  int? frameRateNum;
+
+  int? frameRateDen;
+
+  int? orientation;
+
+  int? projection;
 
   List<Object?> _toList() {
     return <Object?>[
-      mediaId,
+      duration,
+      height,
+      width,
+      sarNum,
+      sarDen,
+      frameRateNum,
+      frameRateDen,
+      orientation,
+      projection,
     ];
   }
 
   Object encode() {
     return _toList();  }
 
-  static MediaOutput decode(Object result) {
+  static MediaVideoTrack decode(Object result) {
     result as List<Object?>;
-    return MediaOutput(
-      mediaId: result[0] as int?,
+    return MediaVideoTrack(
+      duration: result[0] as int?,
+      height: result[1] as int?,
+      width: result[2] as int?,
+      sarNum: result[3] as int?,
+      sarDen: result[4] as int?,
+      frameRateNum: result[5] as int?,
+      frameRateDen: result[6] as int?,
+      orientation: result[7] as int?,
+      projection: result[8] as int?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MediaOutput || other.runtimeType != runtimeType) {
+    if (other is! MediaVideoTrack || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -218,33 +187,48 @@ class MediaOutput {
 ;
 }
 
-class MediaPlayerInput {
-  MediaPlayerInput({
-    this.libVlcId,
+class MediaAudioTrack {
+  MediaAudioTrack({
+    this.trackId,
+    this.channels,
+    this.rate,
+    this.description,
   });
 
-  int? libVlcId;
+  int? trackId;
+
+  int? channels;
+
+  int? rate;
+
+  String? description;
 
   List<Object?> _toList() {
     return <Object?>[
-      libVlcId,
+      trackId,
+      channels,
+      rate,
+      description,
     ];
   }
 
   Object encode() {
     return _toList();  }
 
-  static MediaPlayerInput decode(Object result) {
+  static MediaAudioTrack decode(Object result) {
     result as List<Object?>;
-    return MediaPlayerInput(
-      libVlcId: result[0] as int?,
+    return MediaAudioTrack(
+      trackId: result[0] as int?,
+      channels: result[1] as int?,
+      rate: result[2] as int?,
+      description: result[3] as String?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MediaPlayerInput || other.runtimeType != runtimeType) {
+    if (other is! MediaAudioTrack || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -259,33 +243,89 @@ class MediaPlayerInput {
 ;
 }
 
-class MediaPlayerOutput {
-  MediaPlayerOutput({
-    this.mediaPlayerId,
+class MediaSubtitleTrack {
+  MediaSubtitleTrack({
+    this.trackId,
+    this.encoding,
+    this.description,
   });
 
-  int? mediaPlayerId;
+  int? trackId;
+
+  String? encoding;
+
+  String? description;
 
   List<Object?> _toList() {
     return <Object?>[
-      mediaPlayerId,
+      trackId,
+      encoding,
+      description,
     ];
   }
 
   Object encode() {
     return _toList();  }
 
-  static MediaPlayerOutput decode(Object result) {
+  static MediaSubtitleTrack decode(Object result) {
     result as List<Object?>;
-    return MediaPlayerOutput(
-      mediaPlayerId: result[0] as int?,
+    return MediaSubtitleTrack(
+      trackId: result[0] as int?,
+      encoding: result[1] as String?,
+      description: result[2] as String?,
     );
   }
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) {
-    if (other is! MediaPlayerOutput || other.runtimeType != runtimeType) {
+    if (other is! MediaSubtitleTrack || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(encode(), other.encode());
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => Object.hashAll(_toList())
+;
+}
+
+class VideoViewCreateResult {
+  VideoViewCreateResult({
+    this.objectId,
+    this.textureId,
+  });
+
+  int? objectId;
+
+  int? textureId;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      objectId,
+      textureId,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static VideoViewCreateResult decode(Object result) {
+    result as List<Object?>;
+    return VideoViewCreateResult(
+      objectId: result[0] as int?,
+      textureId: result[1] as int?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! VideoViewCreateResult || other.runtimeType != runtimeType) {
       return false;
     }
     if (identical(this, other)) {
@@ -308,23 +348,20 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is LibVlcInput) {
+    }    else if (value is MediaCreateInput) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    }    else if (value is LibVlcOutput) {
+    }    else if (value is MediaVideoTrack) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    }    else if (value is MediaInput) {
+    }    else if (value is MediaAudioTrack) {
       buffer.putUint8(131);
       writeValue(buffer, value.encode());
-    }    else if (value is MediaOutput) {
+    }    else if (value is MediaSubtitleTrack) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
-    }    else if (value is MediaPlayerInput) {
+    }    else if (value is VideoViewCreateResult) {
       buffer.putUint8(133);
-      writeValue(buffer, value.encode());
-    }    else if (value is MediaPlayerOutput) {
-      buffer.putUint8(134);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -335,17 +372,15 @@ class _PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129: 
-        return LibVlcInput.decode(readValue(buffer)!);
+        return MediaCreateInput.decode(readValue(buffer)!);
       case 130: 
-        return LibVlcOutput.decode(readValue(buffer)!);
+        return MediaVideoTrack.decode(readValue(buffer)!);
       case 131: 
-        return MediaInput.decode(readValue(buffer)!);
+        return MediaAudioTrack.decode(readValue(buffer)!);
       case 132: 
-        return MediaOutput.decode(readValue(buffer)!);
+        return MediaSubtitleTrack.decode(readValue(buffer)!);
       case 133: 
-        return MediaPlayerInput.decode(readValue(buffer)!);
-      case 134: 
-        return MediaPlayerOutput.decode(readValue(buffer)!);
+        return VideoViewCreateResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
@@ -365,14 +400,15 @@ class VlcApi {
 
   final String pigeonVar_messageChannelSuffix;
 
-  Future<LibVlcOutput> createLibVlc(LibVlcInput input) async {
+  /// LibVLC
+  Future<int> createLibVlc(List<String>? options) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createLibVlc$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[input]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[options]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -389,11 +425,40 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as LibVlcOutput?)!;
+      return (pigeonVar_replyList[0] as int?)!;
     }
   }
 
-  Future<MediaOutput> createMedia(MediaInput input) async {
+  Future<bool> disposeLibVlc(int libVlcId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeLibVlc$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[libVlcId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  /// Media
+  Future<int> createMedia(MediaCreateInput input) async {
     final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createMedia$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
@@ -417,18 +482,18 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as MediaOutput?)!;
+      return (pigeonVar_replyList[0] as int?)!;
     }
   }
 
-  Future<MediaPlayerOutput> createMediaPlayer(MediaPlayerInput input) async {
-    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createMediaPlayer$pigeonVar_messageChannelSuffix';
+  Future<bool> setMediaEventListener(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.setMediaEventListener$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
       pigeonVar_channelName,
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
-    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[input]);
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -445,7 +510,717 @@ class VlcApi {
         message: 'Host platform returned null value for non-null return value.',
       );
     } else {
-      return (pigeonVar_replyList[0] as MediaPlayerOutput?)!;
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> mediaParseAsync(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaParseAsync$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<MediaVideoTrack> mediaGetVideoTrack(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetVideoTrack$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as MediaVideoTrack?)!;
+    }
+  }
+
+  Future<List<MediaAudioTrack>> mediaGetAudioTrack(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetAudioTrack$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<MediaAudioTrack>();
+    }
+  }
+
+  Future<List<MediaSubtitleTrack>> mediaGetSubtitleTrack(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaGetSubtitleTrack$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as List<Object?>?)!.cast<MediaSubtitleTrack>();
+    }
+  }
+
+  Future<bool> disposeMedia(int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMedia$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  /// MediaPlayer
+  Future<int> createMediaPlayer(int libVlcId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createMediaPlayer$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[libVlcId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?)!;
+    }
+  }
+
+  Future<bool> mediaPlayerSetMedia(int mediaPlayerId, int mediaId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetMedia$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, mediaId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> mediaPlayerAttachVideoView(int mediaPlayerId, int videoViewId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerAttachVideoView$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, videoViewId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> mediaPlayerPlay(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPlay$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> mediaPlayerPause(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerPause$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<void> mediaPlayerStop(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerStop$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<bool> mediaPlayerIsPlaying(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerIsPlaying$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<void> mediaPlayerSetTime(int mediaPlayerId, int time, bool fast) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetTime$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, time, fast]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int> mediaPlayerGetTime(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetTime$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?)!;
+    }
+  }
+
+  Future<void> mediaPlayerSetPosition(int mediaPlayerId, double position, bool fast) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, position, fast]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double> mediaPlayerGetPosition(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetPosition$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?)!;
+    }
+  }
+
+  Future<int> mediaPlayerGetLength(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetLength$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?)!;
+    }
+  }
+
+  Future<void> mediaPlayerSetVolume(int mediaPlayerId, int volume) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetVolume$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, volume]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<int> mediaPlayerGetVolume(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetVolume$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as int?)!;
+    }
+  }
+
+  Future<void> mediaPlayerSetRate(int mediaPlayerId, double rate) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerSetRate$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId, rate]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
+
+  Future<double> mediaPlayerGetRate(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.mediaPlayerGetRate$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as double?)!;
+    }
+  }
+
+  Future<bool> disposeMediaPlayer(int mediaPlayerId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeMediaPlayer$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[mediaPlayerId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  /// Video View
+  Future<VideoViewCreateResult> createVideoView() async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.createVideoView$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(null);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as VideoViewCreateResult?)!;
+    }
+  }
+
+  Future<bool> videoViewSetDefaultBufferSize(int videoViewId, int width, int height) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.videoViewSetDefaultBufferSize$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[videoViewId, width, height]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+
+  Future<bool> disposeVideoView(int videoViewId) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcApi.disposeVideoView$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[videoViewId]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as bool?)!;
+    }
+  }
+}
+
+abstract class VlcFlutterApi {
+  static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
+
+  bool onMediaEvent(int mediaId, int event);
+
+  static void setUp(VlcFlutterApi? api, {BinaryMessenger? binaryMessenger, String messageChannelSuffix = '',}) {
+    messageChannelSuffix = messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+    {
+      final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+          'dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent$messageChannelSuffix', pigeonChannelCodec,
+          binaryMessenger: binaryMessenger);
+      if (api == null) {
+        pigeonVar_channel.setMessageHandler(null);
+      } else {
+        pigeonVar_channel.setMessageHandler((Object? message) async {
+          assert(message != null,
+          'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null.');
+          final List<Object?> args = (message as List<Object?>?)!;
+          final int? arg_mediaId = (args[0] as int?);
+          assert(arg_mediaId != null,
+              'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null, expected non-null int.');
+          final int? arg_event = (args[1] as int?);
+          assert(arg_event != null,
+              'Argument for dev.flutter.pigeon.com.shinezzl.vlc_player.VlcFlutterApi.onMediaEvent was null, expected non-null int.');
+          try {
+            final bool output = api.onMediaEvent(arg_mediaId!, arg_event!);
+            return wrapResponse(result: output);
+          } on PlatformException catch (e) {
+            return wrapResponse(error: e);
+          }          catch (e) {
+            return wrapResponse(error: PlatformException(code: 'error', message: e.toString()));
+          }
+        });
+      }
     }
   }
 }

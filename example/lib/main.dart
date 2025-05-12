@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:vlc_player/vlc/vlc_player_controller.dart';
+import 'package:vlc_player/vlc_player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,13 +19,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    _controller = VlcPlayerController();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    await _controller.init();
+    _controller = VlcPlayerController.network(
+      "http://streams.videolan.org/streams/mp4/Mr_MrsSmith-h264_aac.mp4",
+    );
   }
 
   @override
@@ -42,8 +35,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('Plugin example app')),
-        body: Center(child: Text('Running on:')),
+        appBar: AppBar(title: const Text('Vlc Player')),
+        body: VlcVideoPlayer(controller: _controller),
       ),
     );
   }
