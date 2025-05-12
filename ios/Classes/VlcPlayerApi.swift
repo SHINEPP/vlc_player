@@ -91,7 +91,8 @@ public class VlcPlayerApi: NSObject, VlcApi {
         print("mediaParseAsync()")
         let mediaWrapper: MediaWrapper? = objectHelper.getObject(id: mediaId)
         let media = mediaWrapper?.getMedia()
-        media?.parse(options: VLCMediaParsingOptions.parseNetwork)
+        let options: VLCMediaParsingOptions = [.parseNetwork, .parseLocal]
+        media?.parse(options: options)
         completion(.success(true))
     }
     

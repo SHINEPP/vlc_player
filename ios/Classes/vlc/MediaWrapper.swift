@@ -34,23 +34,27 @@ class MediaWrapper : NSObject, VLCMediaDelegate {
     }
     
     func mediaMetaDataDidChange(_ aMedia: VLCMedia) {
-        flutterApi.onMediaEvent(mediaId: mediaId, event: MediaEvent.META_CHANGED.rawValue) { result in
-            switch result {
-            case .success(let value):
-                print("Media event sent successfully: \(value)")
-            case .failure(let error):
-                print("Failed to send media event: \(error)")
+        DispatchQueue.main.async {
+            self.flutterApi.onMediaEvent(mediaId: self.mediaId, event: MediaEvent.META_CHANGED.rawValue) { result in
+                switch result {
+                case .success(let value):
+                    print("Media event sent successfully: \(value)")
+                case .failure(let error):
+                    print("Failed to send media event: \(error)")
+                }
             }
         }
     }
 
     func mediaDidFinishParsing(_ aMedia: VLCMedia) {
-        flutterApi.onMediaEvent(mediaId: mediaId, event: MediaEvent.PARSED_CHANGED.rawValue) { result in
-            switch result {
-            case .success(let value):
-                print("Media event sent successfully: \(value)")
-            case .failure(let error):
-                print("Failed to send media event: \(error)")
+        DispatchQueue.main.async {
+            self.flutterApi.onMediaEvent(mediaId: self.mediaId, event: MediaEvent.PARSED_CHANGED.rawValue) { result in
+                switch result {
+                case .success(let value):
+                    print("Media event sent successfully: \(value)")
+                case .failure(let error):
+                    print("Failed to send media event: \(error)")
+                }
             }
         }
     }

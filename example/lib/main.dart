@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _controller = VlcPlayerController.network(
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      "https://s3.ap-southeast-2.amazonaws.com/app-4k-wallpaper-list/res/Live/live/1.mp4",
     );
   }
 
